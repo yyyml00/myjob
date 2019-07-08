@@ -1,30 +1,32 @@
 <template>
   <el-container>
   <el-header>
-    <h1>水库管理系统</h1>
+    <h1>智慧水闸管理系统</h1>
     <div class="loginStatu">
       <el-menu
         :default-active="activeIndex2"
         class="el-menu-demo"
         mode="horizontal"
-        background-color="#545c64"
+        background-color="rgb(87, 174, 255)"
         text-color="#fff"
         active-text-color="#ffd04b">
 
-        <el-menu-item index="1" ><i class="el-icon-user-solid"></i>已登录</el-menu-item>
-        <el-menu-item index="2" >个人中心</el-menu-item>
-        <el-menu-item index="3" >退出登录</el-menu-item>
+        <el-menu-item index="7" ><i class="el-icon-user-solid"></i>已登录</el-menu-item>
+        <el-menu-item index="8" >个人中心</el-menu-item>
+        <el-menu-item index="9" >退出登录</el-menu-item>
 
         </el-menu>
     </div>
   </el-header>
   <el-container >
-    <el-aside width="200px">
+    <el-aside width="200px" id="my-aside">
         <el-menu
-        default-active="2"
+        default-active=""
         class="el-menu-vertical-demo"
-        background-color="#545c64"
-        text-color="#fff">
+        background-color="rgb(87, 174, 255)"
+        text-color="#fff"
+        active-text-color="#ffd04b"
+        >
         <router-link to="/index">
         <el-menu-item index="2">
         <i class="el-icon-menu"></i>
@@ -33,19 +35,24 @@
         </router-link>
          <el-submenu index="1">
         <template slot="title">
-        <i class="el-icon-location"></i>
+       
         <span>设备管理</span>
         </template>
         <el-menu-item-group>
+          <router-link to="/index/weixiu">
           <el-menu-item index="1-1">设备维修记录</el-menu-item>
+          </router-link>
+          <router-link to="/index/e-file">
           <el-menu-item index="1-2">设备电子档案</el-menu-item>
+          </router-link>
+          <router-link to="/index/quexian">
           <el-menu-item index="1-3">设备缺陷登记</el-menu-item>
+          </router-link>
           <el-menu-item index="1-4">设备养护记录</el-menu-item>
         </el-menu-item-group>
         </el-submenu>
         <el-submenu index="3">
         <template slot="title">
-        <i class="el-icon-location"></i>
         <span>人员管理</span>
         </template>
         <el-menu-item-group>
@@ -59,7 +66,6 @@
         </el-submenu>
         <el-submenu index="4">
         <template slot="title">
-        <i class="el-icon-location"></i>
         <span>导航一</span>
         </template>
         <el-menu-item-group>
@@ -69,7 +75,6 @@
         </el-submenu>
         <el-submenu index="5">
         <template slot="title">
-        <i class="el-icon-location"></i>
         <span>导航一</span>
         </template>
         <el-menu-item-group>
@@ -110,11 +115,11 @@ export default {
     } */
 
   .el-header{
-    background-color: #545c64;
+    background-color: rgb(87, 174, 255);
     height: 60px;
     line-height: 60px;
     margin-bottom: 6px;
-    box-shadow: 0 0 4px #545c64;
+    box-shadow: 0 0 4px rgb(87, 174, 255);
   }
   .el-header > h1 {
     color: rgb(255, 255, 255);

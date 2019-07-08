@@ -58,9 +58,46 @@ html, body {
         box-shadow: 0 0 20px rgb(168, 162, 162);
         padding: 10px;
         background-color: white;
+        text-align: left;
     }
 .el-row {
         margin-top: 10px;
     }
+.page-title {
+        font-size: 36px;
+        background-color: rgb(87, 174, 255);
+        color: white;
+        height: 60px;
+        
+    }
+#myform input {
+        border: 1px solid rgb(10, 10, 10);
+}
+#myform textarea {
+        border: 1px solid rgb(10, 10, 10);
+}
+ .handle-box {
+      text-align: right;
+    }
+    #search-box {
+      width: 300px;
+      border: 1px solid black;
+      display: inline-block;
+    }
+   
+    .fl {
+      float: right;
+    }
+    .flo {
+      float: left;
+      height: 65px;
+      padding-top: 8PX;
+    }
+    #my-aside i {
+      color: white;
+    }
+    .el-table th{background:rgb(87, 174, 255);color: #fff;font-weight: 500;}
+    .el-table tr td{border: 0.5px solid rgb(87, 174, 255);}
+    .el-table{color: rgb(3, 3, 3);}
 
 </style>

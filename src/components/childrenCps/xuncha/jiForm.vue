@@ -1,43 +1,39 @@
 <template>
     <div class="form">
+    <h1 class="page-title">日巡查登记记录</h1> 
+      
         <el-row>
            <el-col :span="24"><div class="grid-content "> 
             
 
-            <el-form ref="form" :model="form" label-width="170px">
-                    <el-form-item label="水闸名称">
-                        <el-input type="text" v-model="form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item label="选择记录时间">
-                    <el-col :span="11">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-                    </el-col>
-                    </el-form-item>
-                    <el-form-item label="工程设施完好情况">
-                        <el-input type="textarea" v-model="form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item label="闸门位置，有无振动">
-                        <el-input type="textarea" v-model="form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item label="过闸水流形态">
-                        <el-input type="textarea" v-model="form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item label="闸区环境卫生情况">
-                        <el-input type="textarea" v-model="form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item label="自动监控系统仪表，显示器显示是否正常">
-                        <el-input type="textarea" v-model="form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item label="违章情况">
-                        <el-input type="textarea" v-model="form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item label="其他检查情况">
-                        <el-input type="textarea" v-model="form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item label="检查人签字">
-                        <el-input type="text" v-model="form.desc"></el-input>
-                    </el-form-item>
-            </el-form> 
+            <el-radio-group v-model="labelPosition" size="small">
+            <el-radio-button label="left">左对齐</el-radio-button>
+            <el-radio-button label="right">右对齐</el-radio-button>
+            <el-radio-button label="top">顶部对齐</el-radio-button>
+            </el-radio-group>
+            <div style="margin: 20px;"></div>
+            <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign" id="myform" ref="formLabelAlign">
+            <el-form-item label="巡查时间：" prop="date">
+              
+                <el-date-picker type="date" placeholder="选择日期" v-model="formLabelAlign.date" style="width: 100%;"></el-date-picker>
+            
+            </el-form-item>
+            
+            <el-form-item label="巡查情况：" prop="name">
+                <el-input type="textarea" v-model="formLabelAlign.name"></el-input>
+            </el-form-item>
+            <el-form-item label="处理意见：" prop="region">
+                <el-input type="textarea" v-model="formLabelAlign.region"></el-input>
+            </el-form-item>
+            <el-form-item label="巡查人签字：" prop="type">
+                <el-input v-model="formLabelAlign.type"></el-input>
+            </el-form-item>
+            </el-form>
+            <el-divider></el-divider>
+            <div class="handle-box">
+               <el-button type="primary">保存信息</el-button>
+                <el-button @click="resetForm('formLabelAlign')" type="danger">清除信息</el-button>
+             </div>
     </div></el-col>
     </el-row>
         
@@ -48,20 +44,24 @@
 export default {
     name: 'jiform',
     data() {
-        return {
-            form: {
-                desc: ''
-            }
+      return {
+        labelPosition: 'right',
+        formLabelAlign: {
+          date: '',
+          name: '',
+          region: '',
+          type: ''
         }
+      };
+    },
+    methods: {
+      resetForm(formLabelAlign) {
+        this.$refs[formLabelAlign].resetFields();
+      }
     }
     
 }
 </script>
 <style scoped>
-    .el-form-item__label {
-        background-color: aqua;
-    } 
-    .el-textarea__inner {
-        background-color: aqua;
-    }
+   
 </style>
