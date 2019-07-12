@@ -70,18 +70,20 @@ html, body {
         height: 60px;
         
     }
+    /* 表单样式 */
 #myform input {
         border: 1px solid rgb(10, 10, 10);
 }
 #myform textarea {
         border: 1px solid rgb(10, 10, 10);
 }
+/* 搜索处理框样式设置 */
  .handle-box {
       text-align: right;
     }
     #search-box {
       width: 300px;
-      border: 1px solid black;
+      border: 1px solid rgb(87, 174, 255);
       display: inline-block;
     }
    
@@ -96,8 +98,16 @@ html, body {
     #my-aside i {
       color: white;
     }
-    .el-table th{background:rgb(87, 174, 255);color: #fff;font-weight: 500;}
-    .el-table tr td{border: 0.5px solid rgb(87, 174, 255);}
+    /* #mytable {
+      margin: 0 auto;
+    } */
+    /* 表格样式设置 */
+    #mytable table {border-collapse:collapse;margin: 0 auto;}
+    .el-table th{background:rgb(87, 174, 255);color: rgb(255, 255, 255);}
+    .el-table tr td{border: 1px solid rgb(87, 174, 255);}
     .el-table{color: rgb(3, 3, 3);}
 
+    .feiye-box {
+      text-align: center;
+    }
 </style>

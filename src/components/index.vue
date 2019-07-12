@@ -21,7 +21,7 @@
   <el-container >
     <el-aside width="200px" id="my-aside">
         <el-menu
-        default-active=""
+        default-active="2"
         class="el-menu-vertical-demo"
         background-color="rgb(87, 174, 255)"
         text-color="#fff"
@@ -35,7 +35,6 @@
         </router-link>
          <el-submenu index="1">
         <template slot="title">
-       
         <span>设备管理</span>
         </template>
         <el-menu-item-group>
@@ -86,7 +85,9 @@
     </el-aside>
     <el-container>
       <el-main>
+       <transition name="main" mode="out-in">
       <router-view></router-view>
+       </transition>
       </el-main>
     </el-container>
   </el-container>
@@ -147,7 +148,18 @@ export default {
   .el-icon-user-solid {
     color: rgb(252, 252, 253);
   }
-  
+  .main-enter, .main-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+
+  }
+  .main-enter-active {
+    transition: all 0.2s;
+  }
+  /* .main-leave-active {
+    position: absolute;
+    transition: all 0.2s;
+  } */
 
 
  

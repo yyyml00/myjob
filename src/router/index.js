@@ -8,6 +8,7 @@ import Weixiu from '@/components/childrenCps/shebei/weixiu'
 import Efile from '@/components/childrenCps/shebei/e-file'
 import Quexian from '@/components/childrenCps/shebei/quexian'
 import Addquexian from '@/components/childrenCps/shebei/addquexian'
+import Editquexian from '@/components/childrenCps/shebei/editQuexian'
 
 Vue.use(Router)
 
@@ -41,6 +42,9 @@ export default new Router({
         },{
           path: '/index/addquexian',
           component: Addquexian
+        },{
+          path: '/index/editQuexain/:id',
+          component: Editquexian
         }
 
 

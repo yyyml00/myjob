@@ -1,12 +1,12 @@
 <template>
-   <div class="userInfo">
-    <h1 class="page-title">用户信息统计表</h1> 
+   <div class="yanghu">
+    <h1 class="page-title">设备缺陷档案统计表</h1> 
        
        <el-row>
            <el-col :span="24"><div class="grid-content "> 
              <div class="handle-box">
                <router-link to="/index/addquexian">
-               <el-button type="primary" >新增用户信息</el-button>
+               <el-button type="primary" >新增设备缺陷记录</el-button>
                </router-link>
                <div class="flo" >
                <el-button type="primary" size="mini">输入查询</el-button>
@@ -28,49 +28,54 @@
                     style="width: 100%"
                     >
                     <el-table-column
-                    label="用户ID"
-                    prop="user_id"
+                    label="设备编号"
+                    prop="el_id"
                     width="80">
                     </el-table-column>
                     <el-table-column
-                    label="用户姓名"
-                    prop="user_name"
+                    label="流水号"
+                    prop="dr_pipelinenumber"
                     width="80">
                     </el-table-column>
                     <el-table-column
-                    label="用户密码"
-                    prop="user_pwd"
+                    label="设备名称"
+                    prop="dr_name"
                     width="80">
                     </el-table-column>
                     <el-table-column
-                    label="用户电话"
-                    prop="user_phone"
+                    label="缺陷类型"
+                    prop="dr_type"
                     width="80">
                     </el-table-column>
                     <el-table-column
-                    label="性别"
-                    prop="user_sex"
+                    label="缺陷表述"
+                    prop="dr_content"
                     width="200">
                     </el-table-column>
                     <el-table-column
-                    label="地址"
-                    prop="user_name"
+                    label="发现人"
+                    prop="dr_discoverer"
                     width="80">
                     </el-table-column>
                     <el-table-column
-                    label="年龄"
-                    prop="user_age"
+                    label="发现时间"
+                    prop="dr_discoverertime"
                     width="80">
                     </el-table-column>
                     <el-table-column
-                    label="所属部门"
-                    prop="user_department"
+                    label="记录人"
+                    prop="dr_reportperson"
                     width="80">
                     </el-table-column>
                     <el-table-column
-                    label="职位"
-                    prop="user_role"
+                    label="记录时间"
+                    prop="dr_reporttime"
                     width="100">
+                    </el-table-column>
+                    <el-table-column
+                    label="后续处理情况记录"
+                    prop="dr_processing"
+                    width="200">
                     </el-table-column>
                     <el-table-column
                     
@@ -126,14 +131,13 @@ export default {
       },
      handleDelete(index, row) {
         let id = row.id
-        this.axios.get('/api/zsyf/delUserByKey.do?id='+id).then(res => {
+        this.axios.get('/api/zsyf/delDefectRecordByKey.do?id='+id).then(res => {
 
-        let currPage = parseInt(this.currPage)
-        console.log(res)
-        this.axios.get('/api/zsyf/findUserByPage.do?currentPage='+currPage).then(res => {
+        let currPage = this.currPage
+        this.axios.get('/api/zsyf/findDefectRecordByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
             this.tableData = res.data.model.pagemsg.lists
-            
+
            this.totalPage = res.data.model.pagemsg.totalCount
            this.pageSize = res.data.model.pagemsg.pageSize
           } 
@@ -158,7 +162,7 @@ export default {
       handleCurrentChange(val) {
         // console.log(`当前页: ${val}`);
         this.currPage = val
-        this.axios.get('/api/zsyf/findUserByPage.do?currentPage='+this.currPage).then(res => {
+        this.axios.get('/api/zsyf/findDefectRecordByPage.do?currentPage='+this.currPage).then(res => {
           if (res.status === 200) {
             this.tableData = res.data.model.pagemsg.lists
           //  this.totalPage = res.data.model.pagemsg.totalCount
@@ -174,13 +178,13 @@ export default {
         this.loading = true
         let currPage = parseInt(this.currPage) 
         console.log(typeof currPage)
-        this.axios.get('/api/zsyf/findUserByPage.do?currentPage='+currPage).then(res => {
+        this.axios.get('/api/zsyf/findDefectRecordByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
             setTimeout(() => {
             this.loading = false
           }, 400);
             this.tableData = res.data.model.pagemsg.lists
-            console.log(this.tableData)
+
            this.totalPage = res.data.model.pagemsg.totalCount
            this.pageSize = res.data.model.pagemsg.pageSize
           //  this.loading = false

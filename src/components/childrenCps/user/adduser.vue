@@ -1,6 +1,6 @@
 <template>
-    <div class="addquexian">
-    <h1 class="page-title">设备缺陷登记记录</h1> 
+    <div class="adduser">
+    <h1 class="page-title">用户信息录入</h1> 
         <el-row>
            <el-col :span="24"><div class="grid-content "> 
             
@@ -12,10 +12,10 @@
             </el-radio-group>
             <div style="margin: 20px;"></div>
             <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign" id="myform" ref="formLabelAlign">
-            <el-form-item label="流水号：" prop="Dr_pipelinenumber">
+            <el-form-item label="用户编号：" prop="Dr_pipelinenumber">
                 <el-input v-model="formLabelAlign.Dr_pipelinenumber"></el-input>
             </el-form-item>
-            <el-form-item label="设备名称：" prop="Dr_name">
+            <el-form-item label="用户姓名：" prop="Dr_name">
                 <el-input v-model="formLabelAlign.Dr_name"></el-input>
             </el-form-item>
             <el-form-item label="缺陷类型：" prop="Dr_type">
