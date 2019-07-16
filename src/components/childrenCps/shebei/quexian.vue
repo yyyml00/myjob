@@ -11,7 +11,13 @@
                <div class="flo" >
                <el-button type="primary" size="mini">输入查询</el-button>
                <div class="fl">
-                 <el-input
+                 <!-- <el-input
+                        id="search-box"
+                        v-model="search"
+                        size="mini"
+                        placeholder="输入关键字搜索"/> -->
+                   <el-input
+                        @change="searchData()"
                         id="search-box"
                         v-model="search"
                         size="mini"
@@ -24,58 +30,58 @@
                     v-loading="loading"
                     id="mytable"
                     ref="multipleTable"
-                    :data="tableData.filter(data => !search || data.Dr_name.toLowerCase().includes(search.toLowerCase()) || data.Dr_pipelinenumber.toLowerCase().includes(search.toLowerCase()))"
+                    :data="tableData"
                     style="width: 100%"
                     >
                     <el-table-column
                     label="设备编号"
-                    prop="el_id"
-                    width="80">
+                    prop="ei_id"
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="流水号"
                     prop="dr_pipelinenumber"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="设备名称"
                     prop="dr_name"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="缺陷类型"
                     prop="dr_type"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="缺陷表述"
                     prop="dr_content"
-                    width="200">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="发现人"
                     prop="dr_discoverer"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="发现时间"
                     prop="dr_discoverertime"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="记录人"
                     prop="dr_reportperson"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="记录时间"
                     prop="dr_reporttime"
-                    width="100">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="后续处理情况记录"
                     prop="dr_processing"
-                    width="200">
+                    width="140">
                     </el-table-column>
                     <el-table-column
                     label="操作"
@@ -137,15 +143,15 @@ export default {
           this.pageSize = res.data.model.pagemsg.pageSize
           } 
       }).catch(err => {
-        if (err.status === 500) {
+        
           confirm('数据请求失败')
-        }
+        
       })
       
       }).catch(err => {
-        if (err.status === 500) {
+      
           confirm('数据请求失败')
-        }        
+              
       })
 
       },
@@ -178,7 +184,7 @@ export default {
             this.loading = false
           }, 400);
             this.tableData = res.data.model.pagemsg.lists
-
+            console.log(this.tableData)
            this.totalPage = res.data.model.pagemsg.totalCount
            this.pageSize = res.data.model.pagemsg.pageSize
           //  this.loading = false  
@@ -188,6 +194,15 @@ export default {
           confirm('数据请求失败')
         }
       })
+      },
+      searchData() {
+        console.log(11)
+        let newArr = []
+        let val = this.search
+        newArr = this.tableData.filter(item => {
+         return item.dr_name.indexOf(this.search) >= 0
+          })
+        this.tableData = newArr
       }
     },
     created(){

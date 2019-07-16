@@ -47,7 +47,9 @@
           <router-link to="/index/quexian">
           <el-menu-item index="1-3">设备缺陷登记</el-menu-item>
           </router-link>
+          <router-link to="/index/yanghu">
           <el-menu-item index="1-4">设备养护记录</el-menu-item>
+          </router-link>
         </el-menu-item-group>
         </el-submenu>
         <el-submenu index="3">

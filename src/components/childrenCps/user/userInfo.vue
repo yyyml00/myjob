@@ -5,7 +5,7 @@
        <el-row>
            <el-col :span="24"><div class="grid-content "> 
              <div class="handle-box">
-               <router-link to="/index/addquexian">
+               <router-link to="/index/adduser">
                <el-button type="primary" >新增用户信息</el-button>
                </router-link>
                <div class="flo" >
@@ -24,53 +24,53 @@
                     v-loading="loading"
                     id="mytable"
                     ref="multipleTable"
-                    :data="tableData.filter(data => !search || data.Dr_name.toLowerCase().includes(search.toLowerCase()) || data.Dr_pipelinenumber.toLowerCase().includes(search.toLowerCase()))"
+                    :data="tableData"
                     style="width: 100%"
                     >
                     <el-table-column
-                    label="用户ID"
+                    label="用户编号"
                     prop="user_id"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
-                    label="用户姓名"
+                    label="姓名"
                     prop="user_name"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
-                    label="用户密码"
+                    label="密码"
                     prop="user_pwd"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
-                    label="用户电话"
+                    label="电话"
                     prop="user_phone"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="性别"
                     prop="user_sex"
-                    width="200">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="地址"
                     prop="user_name"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="年龄"
                     prop="user_age"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="所属部门"
                     prop="user_department"
-                    width="80">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     label="职位"
                     prop="user_role"
-                    width="100">
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     
@@ -122,7 +122,7 @@ export default {
     methods: {
       handleEdit(index, row) {
         let id = row.id
-        this.$router.push('/index/editQuexain/' + id);
+        this.$router.push('/index/edituser/' + id);
       },
      handleDelete(index, row) {
         let id = row.id

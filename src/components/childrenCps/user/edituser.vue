@@ -1,6 +1,6 @@
 <template>
-    <div class="adduser">
-    <h1 class="page-title">用户信息录入</h1> 
+    <div class="edituser">
+    <h1 class="page-title">编辑用户信息</h1> 
         <el-row>
            <el-col :span="24"><div class="grid-content "> 
             
@@ -74,14 +74,25 @@ export default {
       resetForm(formLabelAlign) {
         this.$refs[formLabelAlign].resetFields();
       },
+      getData() {
+        let id = this.$route.params.id
+        this.axios.get('/api/zsyf/findUserByKey.do?id='+id).then(res => {
+         console.log(res)
+        this.formLabelAlign = res.data.model.user
+        }).catch(err => {
+        // this.resetForm(data)
+         this.formLabelAlign = {}
+      })
+     }, 
       addData() {
+        let id = this.$route.params.id
         var defectRecord = this.qs.stringify(this.formLabelAlign, {
           serializeDate: (date) => {
           return this.moment(date).format("YYYY-MM-DD");
         }
         })
         if(confirm('是否确定保存')){
-           this.axios.post('/api/zsyf/addUser.do',defectRecord).then(res => {
+           this.axios.post('/api/zsyf/updUserByKey.do',defectRecord).then(res => {
         // console.log(111)
         confirm('保存成功')
       }).catch(err => {
@@ -89,12 +100,11 @@ export default {
         confirm('保存失败')
       })
         }
-        // console.log(defectRecord)
-       
-    
     }
 },
-    
+    created() {
+        this.getData()
+    }
     
 }
 </script>

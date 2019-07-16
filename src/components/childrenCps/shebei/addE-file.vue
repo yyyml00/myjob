@@ -1,6 +1,6 @@
 <template>
-    <div class="addquexian">
-    <h1 class="page-title">设备缺陷登记记录</h1> 
+    <div class="addE-file">
+    <h1 class="page-title">电子档案登记表</h1> 
         <el-row>
            <el-col :span="24"><div class="grid-content "> 
             
@@ -12,43 +12,42 @@
             </el-radio-group>
             <div style="margin: 20px;"></div>
             <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign" id="myform" ref="formLabelAlign">
-            <el-form-item label="设备编号：" prop="Ei_id">
-                <el-input v-model="formLabelAlign.Ei_id"></el-input>
+            <el-form-item label="出厂编号：" prop="ei_protectionlevel">
+                <el-input v-model="formLabelAlign.ei_id"></el-input>
             </el-form-item>
-            <el-form-item label="流水号：" prop="Dr_pipelinenumber">
-                <el-input v-model="formLabelAlign.Dr_pipelinenumber"></el-input>
+            <el-form-item label="防护等级：" prop="ei_protectionlevel">
+                <el-input v-model="formLabelAlign.ei_protectionlevel"></el-input>
             </el-form-item>
-            <el-form-item label="设备名称：" prop="Dr_name">
-                <el-input v-model="formLabelAlign.Dr_name"></el-input>
+            <el-form-item label="标准代码：" prop="ei_code">
+                <el-input v-model="formLabelAlign.ei_code"></el-input>
             </el-form-item>
-            <el-form-item label="缺陷类型：" prop="Dr_type">
-                <el-input v-model="formLabelAlign.Dr_type"></el-input>
+            <el-form-item label="制造单位：" prop="ei_company">
+                <el-input v-model="formLabelAlign.ei_company"></el-input>
             </el-form-item>
-            <el-form-item label="发现人：" prop="Dr_discoverer">
-                <el-input v-model="formLabelAlign.Dr_discoverer"></el-input>
-            </el-form-item>
-            <el-form-item label="记录人：" prop="Dr_reportperson">
-                <el-input v-model="formLabelAlign.Dr_reportperson"></el-input>
+            <el-form-item label="规格型号：" prop="ei_model">
+                <el-input v-model="formLabelAlign.ei_model"></el-input>
             </el-form-item>
             
-            <el-form-item label="发现时间：" prop="Dr_discoverertime">
+            <el-form-item label="生产日期：" prop="ei_date">
               
-                <el-date-picker type="date" placeholder="选择日期" v-model="formLabelAlign.Dr_discoverertime" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" v-model="formLabelAlign.ei_date" style="width: 100%;"></el-date-picker>
             
             </el-form-item>
-            <el-form-item label="记录时间：" prop="Dr_reporttime">
+            <!-- <el-form-item label="记录时间：" prop="Dr_reporttime">
               
                 <el-date-picker type="date" placeholder="选择日期" v-model="formLabelAlign.Dr_reporttime" style="width: 100%;"></el-date-picker>
             
-            </el-form-item>
+            </el-form-item> -->
             
-            <el-form-item label="缺陷表述：" prop="Dr_content">
-                <el-input type="textarea" v-model="formLabelAlign.Dr_content"></el-input>
+            <el-form-item label="主要参数：" prop="ei_parameter">
+                <el-input type="textarea" v-model="formLabelAlign.ei_parameter"></el-input>
             </el-form-item>
-            <el-form-item label="后续处理情况记录：" prop="Dr_processing">
-                <el-input type="textarea" v-model="formLabelAlign.Dr_processing"></el-input>
+            <el-form-item label="设备名称：" prop="ei_name">
+                <el-input type="textarea" v-model="formLabelAlign.ei_name"></el-input>
             </el-form-item>
-            
+            <!-- <el-form-item label="出厂编号：" prop="El_id">
+                <el-input v-model="formLabelAlign.El_id"></el-input>
+            </el-form-item> -->
             </el-form>
             <el-divider></el-divider>
             <div class="handle-box">
@@ -68,16 +67,7 @@ export default {
       return {
         labelPosition: 'right',
         formLabelAlign: {
-          // Dr_pipelinenumber: '',
-          // Dr_name: '',
-          // Dr_type: '',
-          // Dr_content: '',
-          // Dr_discoverer: '',
-          // Dr_discoverertime: '',
-          // Dr_reportperson: '',
-          // Dr_reporttime: '',
-          // Dr_processing: '',
-          // El_id: ''
+         
         }
       };
     },
@@ -92,7 +82,7 @@ export default {
         }
         })
         if(confirm('是否确定保存')){
-           this.axios.post('/api/zsyf/addDefectRecord.do',defectRecord).then(res => {
+           this.axios.post('/api/zsyf/addEquipmentInformation.do',defectRecord).then(res => {
         // console.log(111)
         confirm('保存成功')
       }).catch(err => {

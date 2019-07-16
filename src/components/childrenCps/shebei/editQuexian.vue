@@ -12,7 +12,10 @@
             </el-radio-group>
             <div style="margin: 20px;"></div>
             <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign" id="myform" ref="formLabelAlign">
-            <el-form-item label="流水号：" prop="Dr_pipelinenumber">
+            <el-form-item label="设备编号：" prop="Ei_id">
+                <el-input v-model="formLabelAlign.ei_id"></el-input>
+            </el-form-item>
+           <el-form-item label="流水号：" prop="Dr_pipelinenumber">
                 <el-input v-model="formLabelAlign.dr_pipelinenumber"></el-input>
             </el-form-item>
             <el-form-item label="设备名称：" prop="Dr_name">
@@ -45,9 +48,7 @@
             <el-form-item label="后续处理情况记录：" prop="Dr_processing">
                 <el-input type="textarea" v-model="formLabelAlign.dr_processing"></el-input>
             </el-form-item>
-            <el-form-item label="设备编号：" prop="El_id">
-                <el-input v-model="formLabelAlign.el_id"></el-input>
-            </el-form-item>
+            
             </el-form>
             <el-divider></el-divider>
             <div class="handle-box">
@@ -84,13 +85,15 @@ export default {
       })
      }, 
     addData() {
+        let id = this.$route.params.id
         var defectRecord = this.qs.stringify(this.formLabelAlign, {
         serializeDate: (date) => {
         return this.moment(date).format("YYYY-MM-DD");
         }
         })
+        console.log(defectRecord)
         if (confirm('是否保存')) {
-        this.axios.post('/api/zsyf/updDefectRecordByKey.do',defectRecord).then(res => {
+        this.axios.post('/api/zsyf/updDefectRecordByKey.do', defectRecord).then(res => {
         // console.log(111)
         confirm('编辑成功')
       }).catch(err => {

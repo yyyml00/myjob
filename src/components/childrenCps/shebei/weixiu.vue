@@ -1,12 +1,12 @@
 <template>
    <div class="weixiu">
-    <h1 class="page-title">设备缺陷档案统计表</h1> 
+    <h1 class="page-title">设备维修统计表</h1> 
        
        <el-row>
            <el-col :span="24"><div class="grid-content "> 
              <div class="handle-box">
-               <router-link to="/index/addquexian">
-               <el-button type="primary" >新增设备缺陷记录</el-button>
+               <router-link to="/index/addWeixiu">
+               <el-button type="primary" >新增维修记录</el-button>
                </router-link>
                <div class="flo" >
                <el-button type="primary" size="mini">输入查询</el-button>
@@ -28,54 +28,54 @@
                     style="width: 100%"
                     >
                     <el-table-column
-                    label="设备编号"
-                    prop="el_id"
-                    width="80">
+                    label="水闸名称"
+                    prop="r_name"
+                    width="120">
                     </el-table-column>
                     <el-table-column
-                    label="流水号"
-                    prop="dr_pipelinenumber"
-                    width="80">
+                    label="开始日期"
+                    prop="r_runtime"
+                    width="120">
                     </el-table-column>
                     <el-table-column
-                    label="设备名称"
-                    prop="dr_name"
-                    width="80">
+                    label="修理内容"
+                    prop="r_neirong"
+                    width="120">
                     </el-table-column>
                     <el-table-column
-                    label="缺陷类型"
-                    prop="dr_type"
-                    width="80">
+                    label="养护修理实施情况"
+                    prop="r_Implementation"
+                    width="140">
                     </el-table-column>
-                    <el-table-column
+                    <!-- <el-table-column
                     label="缺陷表述"
                     prop="dr_content"
                     width="200">
+                    </el-table-column> -->
+                    <el-table-column
+                    label="耗用人工物料经费"
+                    prop="r_resources"
+                    width="140">
                     </el-table-column>
                     <el-table-column
-                    label="发现人"
-                    prop="dr_discoverer"
-                    width="80">
+                    label="参与人员签字"
+                    prop="r_staffsignature"
+                    width="120">
                     </el-table-column>
                     <el-table-column
-                    label="发现时间"
-                    prop="dr_discoverertime"
-                    width="80">
+                    label="分管领导签字"
+                    prop="r_leadersignature"
+                    width="120">
                     </el-table-column>
                     <el-table-column
-                    label="记录人"
-                    prop="dr_reportperson"
-                    width="80">
+                    label="结束时间"
+                    prop="r_endtime"
+                    width="120">
                     </el-table-column>
                     <el-table-column
-                    label="记录时间"
-                    prop="dr_reporttime"
-                    width="100">
-                    </el-table-column>
-                    <el-table-column
-                    label="后续处理情况记录"
-                    prop="dr_processing"
-                    width="200">
+                    label="设备编号"
+                    prop="ei_id"
+                    width="120">
                     </el-table-column>
                     <el-table-column
                     
@@ -127,14 +127,14 @@ export default {
     methods: {
       handleEdit(index, row) {
         let id = row.id
-        this.$router.push('/index/editQuexain/' + id);
+        this.$router.push('/index/editWeixiu/' + id);
       },
      handleDelete(index, row) {
         let id = row.id
-        this.axios.get('/api/zsyf/delDefectRecordByKey.do?id='+id).then(res => {
+        this.axios.get('/api/zsyf/delRepairRecordByKey.do?id='+id).then(res => {
 
         let currPage = this.currPage
-        this.axios.get('/api/zsyf/findDefectRecordByPage.do?currentPage='+currPage).then(res => {
+        this.axios.get('/api/zsyf/findRepairRecordByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
             this.tableData = res.data.model.pagemsg.lists
 
@@ -142,15 +142,15 @@ export default {
            this.pageSize = res.data.model.pagemsg.pageSize
           } 
       }).catch(err => {
-        if (err.status === 500) {
+       
           confirm('数据请求失败')
-        }
+     
       })
       
       }).catch(err => {
-        if (err.status === 500) {
+       
           confirm('数据请求失败')
-        }
+       
         
       })
 
@@ -162,7 +162,7 @@ export default {
       handleCurrentChange(val) {
         // console.log(`当前页: ${val}`);
         this.currPage = val
-        this.axios.get('/api/zsyf/findDefectRecordByPage.do?currentPage='+this.currPage).then(res => {
+        this.axios.get('/api/zsyf/findRepairRecordByPage.do?currentPage='+this.currPage).then(res => {
           if (res.status === 200) {
             this.tableData = res.data.model.pagemsg.lists
           //  this.totalPage = res.data.model.pagemsg.totalCount
@@ -178,7 +178,7 @@ export default {
         this.loading = true
         let currPage = parseInt(this.currPage) 
         console.log(typeof currPage)
-        this.axios.get('/api/zsyf/findDefectRecordByPage.do?currentPage='+currPage).then(res => {
+        this.axios.get('/api/zsyf/findRepairRecordByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
             setTimeout(() => {
             this.loading = false

@@ -54,6 +54,7 @@ li {
 html, body {
     width: 100%;
 }
+#app {width: 100%;}
 .grid-content {
         box-shadow: 0 0 20px rgb(168, 162, 162);
         padding: 10px;
@@ -110,4 +111,5 @@ html, body {
     .feiye-box {
       text-align: center;
     }
+  
 </style>
