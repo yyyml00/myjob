@@ -54,22 +54,20 @@ li {
 html, body {
     width: 100%;
 }
-#app {width: 100%;}
-.grid-content {
-        box-shadow: 0 0 20px rgb(168, 162, 162);
-        padding: 10px;
-        background-color: white;
-        text-align: left;
-    }
+#app {width: 100%;
+      height: 100%;
+     }
+#fisrt-container{
+  height: 100%;
+}
+
 .el-row {
         margin-top: 10px;
     }
 .page-title {
         font-size: 36px;
         background-color: rgb(87, 174, 255);
-        color: white;
-        height: 60px;
-        
+        color: white;   
     }
     /* 表单样式 */
 #myform input {
@@ -82,34 +80,25 @@ html, body {
  .handle-box {
       text-align: right;
     }
-    #search-box {
-      width: 300px;
-      border: 1px solid rgb(87, 174, 255);
-      display: inline-block;
-    }
-   
-    .fl {
-      float: right;
-    }
-    .flo {
-      float: left;
-      height: 65px;
-      padding-top: 8PX;
-    }
     #my-aside i {
       color: white;
     }
-    /* #mytable {
-      margin: 0 auto;
-    } */
+    #mytable {
+      margin-top: 20px;
+    }
     /* 表格样式设置 */
-    #mytable table {border-collapse:collapse;margin: 0 auto;}
-    .el-table th{background:rgb(87, 174, 255);color: rgb(255, 255, 255);}
+    #mytable table {border-collapse:collapse;margin: 0 auto;border-top: 1px solid #ccc}
+    /* .el-table th{background:rgb(87, 174, 255);color: rgb(255, 255, 255);}
     .el-table tr td{border: 1px solid rgb(87, 174, 255);}
-    .el-table{color: rgb(3, 3, 3);}
-
+    .el-table{color: rgb(3, 3, 3);} */
+    .el-table th>.cell{font-size: 14px; font-weight: 700}
+    .el-table tr td .cell{line-height: 14px;}
+    .el-table tr td .cell{font-size: 12px;font-weight: 500}
     .feiye-box {
       text-align: center;
     }
+  .el-aside .el-submenu__title{
+    width: 180px;
+  }
   
 </style>

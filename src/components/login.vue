@@ -3,15 +3,15 @@
         <section class="form_container">
             <div class="manage_tip">
                 <span class="title">智慧水闸后台管理系统</span>
-                <el-form :model="loginUser" :rules="rules" ref="loginForm" label-width="60px" class="loginForm">
-                     <el-form-item label="邮箱" prop="email">
-                        <el-input v-model="loginUser.email" placeholder="请输入email"></el-input>
+                <el-form :model="loginUser" :rules="rules" ref="loginForm" label-width="80px" class="loginForm">
+                     <el-form-item label="用户名:" prop="user_name">
+                        <el-input v-model="loginUser.user_name" placeholder="请输入用户名"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" prop="password">
-                        <el-input type='password' v-model="loginUser.password" placeholder="请输入密码"></el-input>
+                    <el-form-item label="密码:" prop="user_pwd">
+                        <el-input type='password' v-model="loginUser.user_pwd" placeholder="请输入密码"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type='primary' class="submit_btn" @click="submitForm('loginForm')">登录</el-button>
+                        <el-button type='primary' class="submit_btn" @click="subdata()">登录</el-button>
                     </el-form-item>
                     <div class="tiparea">
                         <p>还没有账号？现在<router-link to='/register'>注册</router-link> </p>
@@ -28,38 +28,59 @@ export default {
     data(){
         return{
             loginUser:{
-                email:'',
-                password:'',
+                user_name:'',
+                user_pwd:'',
             },
             rules:{
-                email:[
-                    {type:'email',required:true,message:'邮箱格式不正确',trigger:'blur'}
+                user_name:[
+                    {required:true,message:'请输入用户名',trigger:'blur'}
                 ],
-                password:[
-                    {required:true,message:'密码不能为空',trigger:'blur'},
-                    {min:6,max:30,message:'长度在6-30之间',trigger:'blur'}
+                user_pwd:[
+                    {required:true,message:'密码不能为空',trigger:'blur'}
                 ],
-            }
+            },
+            mesg: ''
         }
     },
     methods:{
-        submitForm(formName){
-            // this.$refs[formName].validate((valid) => {
-            // if (valid) {
-            //     this.$http.post('/api/users/login',this.loginUser)
-            //             .then(res=>{
-            //                 //登录成功，拿到token
-            //                 const { token } = res.data;
-            //                 localStorage.setItem('eleToken',token)
-            //                 //解析token
-            //                 const decode = jwt_decode(token)
-            //                 //token存储到VueX中
-            //                 this.$store.dispatch("setAuthenticated",!this.isEmpty(decode))
-            //                 this.$store.dispatch("setUser",decode)
-            //                 this.$router.push('/index')
-            //             })
-            //     }    
-            // })
+        // submitForm(formName){
+        //     this.$refs[formName].validate((valid) => {
+        //     if (valid) {
+        //         this.axios.post('/api/zsyf/login.do',this.loginUser)
+        //                 .then(res=>{
+        //                     console.log(res)
+        //                     // //登录成功，拿到token
+        //                     // const { token } = res.data;
+        //                     // localStorage.setItem('eleToken',token)
+        //                     // //解析token
+        //                     // const decode = jwt_decode(token)
+        //                     // //token存储到VueX中
+        //                     // this.$store.dispatch("setAuthenticated",!this.isEmpty(decode))
+        //                     // this.$store.dispatch("setUser",decode)
+        //                     // this.$router.push('/index')
+        //                 })
+        //         }    
+        //     })
+        // },
+        subdata(){
+             var defectRecord = this.qs.stringify(this.loginUser)
+            
+             this.axios.post('/api/zsyf/login.do',defectRecord).then(res => {
+                 console.log(res)
+             if (res.data.model.userbean === undefined) {
+                 console.log(res)
+                 this.mess = res.data.model.error
+                 this.$message({
+                  type: 'warning',
+                  message: this.mess
+             });
+             return false
+             }else{
+                 localStorage.setItem('username', res.data.model.userbean.user_name)
+                 this.$router.push('/index')
+             }
+             
+             })
         },
         isEmpty(value){
             return (
@@ -69,6 +90,9 @@ export default {
                 (typeof value === 'string' && value.trim().length===0)
             );
         },
+    },
+    created() {
+        console.log(this.$store.state.username)
     }
 }
 </script>

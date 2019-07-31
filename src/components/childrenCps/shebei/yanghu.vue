@@ -1,31 +1,31 @@
 <template>
    <div class="quexian">
-    <h1 class="page-title">设备养护统计表</h1> 
-       
+      <edityanghu :id="id" ref="form" :isAdd="isAdd" :yformLabelAlign="yformLabelAlign" :currPage="currPage" @handleUp="handleUp"/>
        <el-row>
-           <el-col :span="24"><div class="grid-content "> 
+           <el-col :span="4"><div class="grid-content " style="text-align: left;">
+           <el-button type="primary" size="mini" >设备养护表</el-button>
+           </div></el-col>
+           <el-col :span="20"><div class="grid-content "> 
              <div class="handle-box">
-               <router-link to="/index/addyanghu">
-               <el-button type="primary" >新增养护记录</el-button>
-               </router-link>
-               <div class="flo" >
-               <el-button type="primary" size="mini">输入查询</el-button>
-               <div class="fl">
+               <el-button type="primary" size="mini" icon="el-icon-refresh" @click="getData(currPage)">刷新</el-button>
+               <el-button type="primary" size="mini" icon="el-icon-plus" @click="add()">新增</el-button>
                  <!-- <el-input
                         id="search-box"
                         v-model="search"
                         size="mini"
                         placeholder="输入关键字搜索"/> -->
                    <el-input
-                        @change="searchData()"
                         id="search-box"
+                        prefix-icon="el-icon-search"
+                        style="display:inline-block;width: 200px;"
                         v-model="search"
                         size="mini"
-                        placeholder="输入关键字搜索"/>
-               </div>
-               </div>
-               <el-divider></el-divider>
+                        clearable
+                        placeholder="输入参与人姓名搜索"/>
+                   <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" style="display:inline-block;" @click="searchData()">搜索</el-button>
              </div>
+             </div></el-col>
+             <el-col :span="24"><div class="grid-content ">
               <el-table
                     v-loading="loading"
                     id="mytable"
@@ -88,11 +88,14 @@
                     <template slot-scope="scope">
                         <el-button
                         size="mini"
-                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        type="primary"
+                        icon="el-icon-edit"
+                        @click="handleEdit(scope.$index, scope.row)"></el-button>
                         <el-button
                         size="mini"
                         type="danger"
-                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        icon="el-icon-delete"
+                        @click="handleDelete(scope.$index, scope.row)"></el-button>
                     </template>
                     </el-table-column>
                 </el-table>
@@ -111,7 +114,9 @@
 </template>
 <script>
 import { setTimeout } from 'timers';
+import edityanghu from './edityanghu'
 export default {
+     components: { edityanghu },
      data() {
       return {
         tableData: [],
@@ -120,37 +125,60 @@ export default {
         totalPage: 0, 
         pageSize: 0,
         currPage: 1,
-        loading: false
+        loading: false,
+        id: 0,
+        loading: false,
+        yformLabelAlign: {},
+        isAdd: false
       }
     },
     methods: {
-      handleEdit(index, row) {
-        let id = row.id
-        this.$router.push('/index/edityanghu/' + id);
+      add() {
+        this.$refs.form.dialog = true
+        this.bformLabelAlign = {}
+        this.id = 0
+        this.isAdd = true
       },
+      handleUp(data) {
+          this.currPage = data;
+          this.getData(this.currPage)
+      },
+      handleEdit(index, row) {
+        this.id = row.id
+        this.isAdd = false
+        this.yformLabelAlign = row
+        // this.$router.push('/index/editEfie/' + this.id);
+         this.$refs.form.dialog = true
+      },
+       open(id) {
+        this.$confirm('你确认删除这条数据吗, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          
+         this.axios.get('/api/zsyf/delEquipmentMaintenanceByKey.do?id='+id).then(res => {
+           this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          let currPage = this.currPage
+          this.getData(this.currPage)
+        }).catch(err => {
+          if (err.status === 500) {
+            confirm('数据请求失败')
+          }        
+        })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });        
+        });
+      }, 
      handleDelete(index, row) {
         let id = row.id
-        this.axios.get('/api/zsyf/delEquipmentMaintenanceByKey.do?id='+id).then(res => {
-        let currPage = this.currPage
-        this.axios.get('/api/zsyf/findEquipmentMaintenanceByPage.do?currentPage='+currPage).then(res => {
-          if (res.status === 200) {
-          this.tableData = res.data.model.pagemsg.lists
-
-          this.totalPage = res.data.model.pagemsg.totalCount
-          this.pageSize = res.data.model.pagemsg.pageSize
-          } 
-      }).catch(err => {
-        if (err.status === 500) {
-          confirm('数据请求失败')
-        }
-      })
-      
-      }).catch(err => {
-        if (err.status === 500) {
-          confirm('数据请求失败')
-        }        
-      })
-
+        this.open(id)
       },
       //   handleSelectionChange(val) {
       //   this.multipleSelection = val;
@@ -171,39 +199,35 @@ export default {
         }
       })
       },
-      getData() {
+      getData(data) {
         this.loading = true
-        let currPage = parseInt(this.currPage) 
-        console.log(typeof currPage)
+        let currPage = parseInt(data) 
         this.axios.get('/api/zsyf/findEquipmentMaintenanceByPage.do?currentPage='+currPage).then(res => {
+          console.log(res)
           if (res.status === 200) {
             setTimeout(() => {
             this.loading = false
           }, 400);
             this.tableData = res.data.model.pagemsg.lists
-            console.log(this.tableData)
            this.totalPage = res.data.model.pagemsg.totalCount
            this.pageSize = res.data.model.pagemsg.pageSize
           //  this.loading = false  
           } 
       }).catch(err => {
-        if (err.status === 500) {
-          confirm('数据请求失败')
-        }
+          console.log(err.response.data.status)
       })
       },
       searchData() {
-        console.log(11)
         let newArr = []
         let val = this.search
         newArr = this.tableData.filter(item => {
-         return item.dr_name.indexOf(this.search) >= 0
+         return item.em_staffsignature.indexOf(this.search) >= 0
           })
         this.tableData = newArr
       }
     },
     created(){
-       this.getData()  
+       this.getData(this.currPage)  
     }
 }
 </script>

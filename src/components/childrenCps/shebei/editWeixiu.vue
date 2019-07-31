@@ -1,112 +1,133 @@
 <template>
-    <div class="updWeixiu">
-    <h1 class="page-title">修改维修记录表</h1> 
-        <el-row>
-           <el-col :span="24"><div class="grid-content ">             
-            <el-radio-group v-model="labelPosition" size="small">
-            <el-radio-button label="left">左对齐</el-radio-button>
-            <el-radio-button label="right">右对齐</el-radio-button>
-            <el-radio-button label="top">顶部对齐</el-radio-button>
-            </el-radio-group>
-            <div style="margin: 20px;"></div>
-            <el-form :label-position="labelPosition" label-width="150px" :model="formLabelAlign" id="myform" ref="formLabelAlign">
+      <el-dialog :visible.sync="dialog" append-to-body width="780px" :title="isAdd ? '新增维修记录' : '编辑维修记录'">
+            <el-form :inline="true" size="small" label-width="150px" :model="wformLabelAlign" ref="formLabelAlign">
             <el-form-item label="水闸名称" prop="r_name">
-                <el-input v-model="formLabelAlign.r_name"></el-input>
+                <el-input v-model="wformLabelAlign.r_name"></el-input>
             </el-form-item>
             <!-- <el-form-item label="防护等级：" prop="R_runtime">
                 <el-input v-model="formLabelAlign.R_runtime"></el-input>
             </el-form-item> -->
             <el-form-item label="修理内容：" prop="r_neirong">
-                <el-input v-model="formLabelAlign.r_neirong"></el-input>
+                <el-input v-model="wformLabelAlign.r_neirong"></el-input>
             </el-form-item>
             <el-form-item label="养护修理实施情况：" prop="r_Implementation">
-                <el-input v-model="formLabelAlign.r_Implementation"></el-input>
+                <el-input v-model="wformLabelAlign.r_Implementation"></el-input>
             </el-form-item>
             <el-form-item label="耗用人工物料经费：" prop="r_resources">
-                <el-input v-model="formLabelAlign.r_resources"></el-input>
+                <el-input v-model="wformLabelAlign.r_resources"></el-input>
             </el-form-item>
             
             <el-form-item label="结束时间：" prop="r_endtime">
               
-                <el-date-picker type="date" placeholder="选择日期" v-model="formLabelAlign.r_endtime" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" v-model="wformLabelAlign.r_endtime" style="width: 200px;"></el-date-picker>
             
             </el-form-item>
             <el-form-item label="开始时间：" prop="r_runtime">
               
-                <el-date-picker type="date" placeholder="选择日期" v-model="formLabelAlign.r_runtime" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" v-model="wformLabelAlign.r_runtime" style="width: 200px;"></el-date-picker>
             
             </el-form-item>
             
             <el-form-item label="参与人员签字：" prop="r_staffsignature">
-                <el-input type="textarea" v-model="formLabelAlign.r_staffsignature"></el-input>
+                <el-input type="textarea" v-model="wformLabelAlign.r_staffsignature" style="width: 565px;"></el-input>
             </el-form-item>
             <el-form-item label="分管领导签字：" prop="r_leadersignature">
-                <el-input type="textarea" v-model="formLabelAlign.r_leadersignature"></el-input>
+                <el-input type="textarea" v-model="wformLabelAlign.r_leadersignature" style="width: 565px;"></el-input>
             </el-form-item>
             <el-form-item label="设备编号：" prop="ei_id">
-                <el-input v-model="formLabelAlign.ei_id"></el-input>
+                <el-input v-model="wformLabelAlign.ei_id"></el-input>
             </el-form-item>
-            </el-form>
-            <el-divider></el-divider>
-            <div class="handle-box">
+            <el-form-item style="text-align: right;width: 100%;">
                <el-button type="primary" @click="addData()">保存信息</el-button>
                 <el-button @click="resetForm('formLabelAlign')" type="danger">清除信息</el-button>
-             </div>
-    </div></el-col>
-    </el-row>
-        
-        
-    </div>   
+            </el-form-item>
+            </el-form>
+        </el-dialog>  
 </template>
 <script>
 export default {
-    name: 'jiform',
+    name: 'weixiu',
+    props: {
+        isAdd: {
+          type: Boolean,
+          default: false
+        },
+        id: {
+          type: Number,
+          default: 0
+        },
+        wformLabelAlign: {
+          type: Object,
+          default: {}
+        },
+        tableData: {
+          type: Array,
+          tableData: []
+        },
+        currPage: {
+          type: Number,
+          currPage: 1
+        }
+      },
     data() {
       return {
-        labelPosition: 'right',
-        formLabelAlign: {
-        }
+        dialog: false,
       };
     },
     methods: {
       resetForm(formLabelAlign) {
         this.$refs[formLabelAlign].resetFields();
       },
-      getData() {
-        let id = this.$route.params.id
-         console.log(id)
-        this.axios.get('/api/zsyf/findRepairRecordByKey.do?id='+id).then(res => {
-         console.log(res)
-        this.formLabelAlign = res.data.model.rr
-        }).catch(err => {
-        // this.resetForm(data)
-         this.formLabelAlign = {}
-      })
-     }, 
+      open(defectRecord) {
+        this.$confirm('你是否要保存此编辑内容, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (this.id === 0) {
+            this.axios.post('/api/zsyf/addRepairRecord.do',defectRecord).then(res => {
+              this.$emit('handleUp',this.currPage)
+              this.$message({
+                type: 'success',
+                message: '保存成功!'
+              });
+            }).catch(err => {
+              this.$message({
+                type: 'info',
+                message: '保存失败!'
+              });
+            })
+          }else{
+             this.axios.post('/api/zsyf/updRepairRecordByKey.do',defectRecord).then(res => {
+               this.$emit('handleUp',this.currPage)
+                this.$message({
+                  type: 'success',
+                  message: '保存成功!'
+                });
+              }).catch(err => {
+                this.$message({
+                  type: 'info',
+                  message: '保存失败!'
+                });
+              })
+          } 
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消保存'
+          });          
+        });
+      }, 
       addData() {
-        let id = this.$route.params.id
-        var defectRecord = this.qs.stringify(this.formLabelAlign, {
+        var defectRecord = this.qs.stringify(this.wformLabelAlign, {
           serializeDate: (date) => {
           return this.moment(date).format("YYYY-MM-DD");
         }
         })
-        if(confirm('是否确定保存')){
-           this.axios.post('/api/zsyf/updRepairRecordByKey.do',defectRecord).then(res => {
-        // console.log(111)
-        confirm('保存成功')
-      }).catch(err => {
-        // this.resetForm(data)
-        confirm('保存失败')
-      })
-        }
+       this.open(defectRecord)
     },
     
 },
-    
-  created(){
-        this.getData()
-    }
-       
 }
 </script>
 <style scoped>

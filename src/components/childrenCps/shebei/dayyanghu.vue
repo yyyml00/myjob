@@ -1,6 +1,6 @@
 <template>
    <div class="e-file">
-       <editEfile :id="id" ref="form" :isAdd="isAdd" :bformLabelAlign="bformLabelAlign" :currPage="currPage" @handleUp="handleUp"/> 
+       <editdayyanghu :id="id" ref="form" :isAdd="isAdd" :bformLabelAlign="bformLabelAlign" :currPage="currPage" @handleUp="handleUp"/> 
        <el-row>
            <el-col :span="4"><div class="grid-content " style="text-align: left;">
            <el-button type="primary" size="mini" >设备电子档案</el-button>
@@ -23,7 +23,7 @@
                         v-model="search"
                         size="mini"
                         clearable
-                        placeholder="输入出厂编号搜索"/>
+                        placeholder="输入设备名称搜索"/>
                    <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" style="display:inline-block;" @click="searchData()">搜索</el-button>
              </div>
              </div></el-col>
@@ -36,48 +36,126 @@
                     style="width: 100%"
                     >
                     <el-table-column
-                    label="生产日期"
-                    prop="ei_date"
+                    label="水闸名称"
+                    prop="mr_name"
                     width="120">
                     </el-table-column>
                     <el-table-column
-                    label="规格型号"
-                    prop="ei_model"
+                    label="养护日期"
+                    prop="mr_date"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column label="机房内保洁">
+                    <el-table-column
+                    label="养护实施情况"
+                    prop="mr_cleaning"
                     width="120">
                     </el-table-column>
                     <el-table-column
-                    label="防护等级"
-                    prop="ei_protectionlevel"
+                    label="养护人签字"
+                    prop="mr_sign_1"
                     width="120">
+                    </el-table-column>
+                    </el-table-column>
+                    <el-table-column label="启闭机养护">
+                     <el-table-column
+                    label="养护实施情况"
+                    prop="mr_hoist"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column
+                    label="养护人签字"
+                    prop="mr_sign_2"
+                    width="120">
+                    </el-table-column>
+                    </el-table-column>
+                    <el-table-column label="钢丝绳养护">
+                    <el-table-column
+                    label="养护实施情况"
+                    prop="mr_rope"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column
+                    label="养护人签字"
+                    prop="mr_sign_3"
+                    width="120">
+                    </el-table-column>
+                    </el-table-column>
+                    <el-table-column label="电气设备养护">
+                    <el-table-column
+                    label="养护实施情况"
+                    prop="mr_electric"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column
+                    label="养护人签字"
+                    prop="mr_sign_4"
+                    width="120">
+                    </el-table-column>
+                    </el-table-column>
+                    <el-table-column label="闸门养护">
+                    <el-table-column
+                    label="养护实施情况"
+                    prop="mr_sluicegate"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column
+                    label="养护人签字"
+                    prop="mr_sign_5"
+                    width="120">
+                    </el-table-column>
+                    </el-table-column>
+                    <el-table-column label="闸门上下游漂浮物清除">
+                     <el-table-column
+                    label="养护实施情况"
+                    prop="mr_float"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column
+                    label="养护人签字"
+                    prop="mr_sign_6"
+                    width="120">
+                    </el-table-column>
+                    </el-table-column>
+                    <el-table-column label="闸区卫生">
+                    <el-table-column
+                    label="养护实施情况"
+                    prop="mr_hygiene"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column
+                    label="养护人签字"
+                    prop="mr_sign_7"
+                    width="120">
+                    </el-table-column>
+                    </el-table-column>
+                    <el-table-column label="堤防养护">
+                    <el-table-column
+                    label="养护实施情况"
+                    prop="mr_dykes"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column
+                    label="养护人签字"
+                    prop="mr_sign_8"
+                    width="120">
+                    </el-table-column>
+                    </el-table-column>
+                    <el-table-column label="其他项目养护">
+                    <el-table-column
+                    label="养护实施情况"
+                    prop="mr_project"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column
+                    label="养护人签字"
+                    prop="mr_sign_9"
+                    width="120">
+                    </el-table-column>
                     </el-table-column>
                      <el-table-column
-                    label="出厂编号"
-                    prop="ei_id"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="标准代号"
-                    prop="ei_code"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="制造单位"
-                    prop="ei_company"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="主要参数"
-                    prop="ei_parameter"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="设备名称"
-                    prop="ei_name"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="设备组"
-                    prop="ei_group"
+                    label="技术负责人签字"
+                    prop="mr_technology"
                     width="120">
                     </el-table-column>
                     <el-table-column
@@ -110,6 +188,15 @@
                   :page-size="pageSize">
                 </el-pagination>
             </div></el-col>
+            <el-col :span="24"><div class="grid-content ">
+              
+                <form action="http://192.168.11.101:8080/zsyf/deploymentByZip.do" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" id="file">
+                    <input type="text" name="deploymentname" id="text">
+                    <button type="submit" class="sub">提交</button>
+                </form>
+                
+              </div></el-col>
         </el-row>
        
        
@@ -117,9 +204,9 @@
 </template>
 <script>
 import { setTimeout } from 'timers';
-import editEfile from './editEfile'
+import editdayyanghu from './editdayyanghu'
 export default {
-     components: { editEfile },
+     components: { editdayyanghu },
      data() {
       return {
         tableData: [],
@@ -152,7 +239,7 @@ export default {
       },
       handleCurrentChange(val) {
         this.currPage = val
-        this.axios.get('/api/zsyf/findEquipmentInformationByPage.do?currentPage='+this.currPage).then(res => {
+        this.axios.get('/api/zsyf/findMaintenanceRecordsByPage.do?currentPage='+this.currPage).then(res => {
           if (res.status === 200) {
           this.tableData = res.data.model.pagemsg.lists
           }
@@ -168,13 +255,13 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-           this.axios.get('/api/zsyf/delEquipmentInformationByKey.do?id='+id).then(res => {
+           this.axios.get('/api/zsyf/delMaintenanceRecordsByKey.do?id='+id).then(res => {
               this.$message({
               type: 'success',
               message: '删除成功!'
             });
           let currPage = this.currPage
-          this.axios.get('/api/zsyf/findEquipmentInformationByPage.do?currentPage='+currPage).then(res => {
+          this.axios.get('/api/zsyf/findMaintenanceRecordsByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
           this.tableData = res.data.model.pagemsg.lists
           this.totalPage = res.data.model.pagemsg.totalCount
@@ -203,7 +290,7 @@ export default {
         this.loading = true
         let currPage = parseInt(data) 
 
-        this.axios.get('/api/zsyf/findEquipmentInformationByPage.do?currentPage='+currPage).then(res => {
+        this.axios.get('/api/zsyf/findMaintenanceRecordsByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
             setTimeout(() => {
             this.loading = false
@@ -219,7 +306,6 @@ export default {
       })
       },
       searchData() {
-        console.log(11)
         let newArr = []
         let val = this.search
         newArr = this.tableData.filter(item => {         
@@ -232,7 +318,7 @@ export default {
      
     },
     created(){
-       this.getData(this.currPage)  
+       this.getData(this.currPage)
     },
     // updated(){
     //    this.getData() 

@@ -1,9 +1,9 @@
 <template>
    <div class="e-file">
-       <editEfile :id="id" ref="form" :isAdd="isAdd" :bformLabelAlign="bformLabelAlign" :currPage="currPage" @handleUp="handleUp"/> 
+       <editdiaodu :id="id" ref="form" :isAdd="isAdd" :bformLabelAlign="bformLabelAlign" :currPage="currPage" @handleUp="handleUp"/> 
        <el-row>
            <el-col :span="4"><div class="grid-content " style="text-align: left;">
-           <el-button type="primary" size="mini" >设备电子档案</el-button>
+           <el-button type="primary" size="mini" >水闸调度令</el-button>
            </div></el-col>
            <el-col :span="20"><div class="grid-content "> 
              <div class="handle-box">
@@ -23,7 +23,7 @@
                         v-model="search"
                         size="mini"
                         clearable
-                        placeholder="输入出厂编号搜索"/>
+                        placeholder="输入设备名称搜索"/>
                    <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" style="display:inline-block;" @click="searchData()">搜索</el-button>
              </div>
              </div></el-col>
@@ -36,67 +36,81 @@
                     style="width: 100%"
                     >
                     <el-table-column
-                    label="生产日期"
-                    prop="ei_date"
+                    label="调度编号"
+                    prop="do_id"
                     width="120">
                     </el-table-column>
                     <el-table-column
-                    label="规格型号"
-                    prop="ei_model"
+                    label="调度依据"
+                    prop="do_reason"
                     width="120">
                     </el-table-column>
                     <el-table-column
-                    label="防护等级"
-                    prop="ei_protectionlevel"
+                    label="调度指令"
+                    prop="do_instructions"
                     width="120">
                     </el-table-column>
                      <el-table-column
-                    label="出厂编号"
-                    prop="ei_id"
+                    label="调度指令下达人"
+                    prop="do_giveacommand"
                     width="120">
                     </el-table-column>
                     <el-table-column
-                    label="标准代号"
-                    prop="ei_code"
+                    label="调度指令接收人"
+                    prop="do_receivecommands"
                     width="120">
                     </el-table-column>
                     <el-table-column
-                    label="制造单位"
-                    prop="ei_company"
+                    label="时间"
+                    prop="do_time"
                     width="120">
                     </el-table-column>
-                    <el-table-column
-                    label="主要参数"
-                    prop="ei_parameter"
+                    <!-- <el-table-column
+                    label="状态"
+                    prop="do_state"
                     width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="设备名称"
-                    prop="ei_name"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="设备组"
-                    prop="ei_group"
-                    width="120">
+                    </el-table-column> -->
+                     <el-table-column
+                    label="状态"
+                    width="160">
+                    <template slot-scope="scope">
+                        <el-tag
+                        v-if="scope.row.do_state === 0 ? true : false"
+                        >初始录入</el-tag>
+                        <el-tag
+                        type="warning"
+                        v-if="scope.row.do_state === 1 ? true : false"
+                        >审核中</el-tag>
+                        <el-tag
+                        type="success"
+                        v-if="scope.row.do_state === 2 ? true : false"
+                        >审核结束</el-tag>
+                    </template>
                     </el-table-column>
                     <el-table-column
                     label="操作"
-                    width="160">
-                    <!-- <template slot="header" slot-scope="">
-                        
-                    </template> -->
+                    width="300">
                     <template slot-scope="scope">
                         <el-button
                         size="mini"
                         type="primary"
-                        icon="el-icon-edit"
-                        @click="handleEdit(scope.$index, scope.row)"></el-button>
+                        v-if="scope.row.do_state === 0? true : false"
+                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                         <el-button
                         size="mini"
+                        v-if="scope.row.do_state === 0||scope.row.do_state === 2? true : false"
                         type="danger"
-                        icon="el-icon-delete"
-                        @click="handleDelete(scope.$index, scope.row)"></el-button>
+                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        <el-button
+                        size="mini"
+                        type="success"
+                        v-if="scope.row.do_state === 1? true : false"
+                        @click="handlezh(scope.$index, scope.row)">审核中</el-button>
+                        <el-button
+                        size="mini"
+                        type="success"
+                        v-if="scope.row.do_state === 0? true : false"
+                        @click="handle(scope.$index, scope.row)">提交申请</el-button>
                     </template>
                     </el-table-column>
                 </el-table>
@@ -117,9 +131,9 @@
 </template>
 <script>
 import { setTimeout } from 'timers';
-import editEfile from './editEfile'
+import editdiaodu from './editdiaodu'
 export default {
-     components: { editEfile },
+     components: { editdiaodu },
      data() {
       return {
         tableData: [],
@@ -131,10 +145,43 @@ export default {
         id: 0,
         loading: false,
         bformLabelAlign: {},
-        isAdd: false
+        isAdd: false,
       }
     },
     methods: {
+      handle(index, row) {
+        row.user_name = this.$store.state.username
+         var defectRecord = this.qs.stringify(row, {
+          serializeDate: (date) => {
+          return this.moment(date).format("YYYY-MM-DD");
+        }
+        })
+        this.axios.post('/api/zsyf/starDoTask.do', defectRecord).then(res => {
+        this.$message({
+              type: 'success',
+              message: '提交成功!'
+            });
+             let currPage = this.currPage
+          this.axios.get('/api/zsyf/findDispatchingOrderByPage.do?currentPage='+currPage).then(res => {
+          if (res.status === 200) {
+          this.tableData = res.data.model.pagemsg.lists
+          this.totalPage = res.data.model.pagemsg.totalCount
+          this.pageSize = res.data.model.pagemsg.pageSize
+          } 
+      }).catch(err => {
+          confirm('数据请求失败')
+      })  
+      }).catch(err => {
+       
+      })
+      },
+       handlezh() {
+         this.$confirm('任务审核中无法操作', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+      },
       handleUp(data) {
           this.currPage = data;
           this.getData(this.currPage)
@@ -152,7 +199,7 @@ export default {
       },
       handleCurrentChange(val) {
         this.currPage = val
-        this.axios.get('/api/zsyf/findEquipmentInformationByPage.do?currentPage='+this.currPage).then(res => {
+        this.axios.get('/api/zsyf/findDispatchingOrderByPage.do?currentPage='+this.currPage).then(res => {
           if (res.status === 200) {
           this.tableData = res.data.model.pagemsg.lists
           }
@@ -168,13 +215,13 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-           this.axios.get('/api/zsyf/delEquipmentInformationByKey.do?id='+id).then(res => {
+           this.axios.get('/api/zsyf/delDispatchingOrderByKey.do?id='+id).then(res => {
               this.$message({
               type: 'success',
               message: '删除成功!'
             });
           let currPage = this.currPage
-          this.axios.get('/api/zsyf/findEquipmentInformationByPage.do?currentPage='+currPage).then(res => {
+          this.axios.get('/api/zsyf/findDispatchingOrderByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
           this.tableData = res.data.model.pagemsg.lists
           this.totalPage = res.data.model.pagemsg.totalCount
@@ -196,6 +243,7 @@ export default {
       add() {
         this.$refs.form.dialog = true
         this.bformLabelAlign = {}
+        this.bformLabelAlign.do_state = 0
         this.id = 0
         this.isAdd = true
       },
@@ -203,7 +251,8 @@ export default {
         this.loading = true
         let currPage = parseInt(data) 
 
-        this.axios.get('/api/zsyf/findEquipmentInformationByPage.do?currentPage='+currPage).then(res => {
+        this.axios.get('/api/zsyf/findDispatchingOrderByPage.do?currentPage='+currPage).then(res => {
+          console.log(res)
           if (res.status === 200) {
             setTimeout(() => {
             this.loading = false
@@ -219,7 +268,6 @@ export default {
       })
       },
       searchData() {
-        console.log(11)
         let newArr = []
         let val = this.search
         newArr = this.tableData.filter(item => {         
@@ -232,7 +280,7 @@ export default {
      
     },
     created(){
-       this.getData(this.currPage)  
+       this.getData(this.currPage) 
     },
     // updated(){
     //    this.getData() 

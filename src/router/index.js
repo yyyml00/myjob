@@ -1,33 +1,34 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 import Index from '@/components/index'
 import Login from '@/components/login'
 import Register from '@/components/register'
 import Subindex from '@/components/childrenCps/index'
+import Gzliu from '@/components/childrenCps/gzliu/index'
+import Renwu from '@/components/childrenCps/gzliu/renwu'
+// import Task from '@/components/childrenCps/gzliu/task'
 import Userinfo from '@/components/childrenCps/user/userInfo'
-import Jiform from '@/components/childrenCps/xuncha/jiForm'
+import dayxuncha from '@/components/childrenCps/xuncha/dayxuncha'
 import Weixiu from '@/components/childrenCps/shebei/weixiu'
 import Yanghu from '@/components/childrenCps/shebei/yanghu'
 import Efile from '@/components/childrenCps/shebei/e-file'
+import Zichan from '@/components/childrenCps/shebei/zichan'
 import Quexian from '@/components/childrenCps/shebei/quexian'
-import Addquexian from '@/components/childrenCps/shebei/addquexian'
-import Addyanghu from '@/components/childrenCps/shebei/addyanghu'
-import Editquexian from '@/components/childrenCps/shebei/editQuexian'
-import Edityanghu from '@/components/childrenCps/shebei/edityanghu'
-import AddEfile from '@/components/childrenCps/shebei/addE-file'
-import EditEfile from '@/components/childrenCps/shebei/editEfile'
-import Edituser from '@/components/childrenCps/user/edituser'
-import AddWeixiu from '@/components/childrenCps/shebei/addWeixiu'
-import Editweixiu from '@/components/childrenCps/shebei/editWeixiu'
-import Adduser from '@/components/childrenCps/user/adduser'
+import Dayyanghu from '@/components/childrenCps/shebei/dayyanghu'
+import Diaodu from '@/components/childrenCps/diaodu/diaodu'
 
 Vue.use(Router)
 
-export default new Router({
+ const router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
-      redirect: '/index'
+      redirect: '/index',
+      meta: { requiresAuth: true }
     },{
       path: '/login',
       component: Login
@@ -37,6 +38,7 @@ export default new Router({
     },{
       path: '/index',
       component: Index,
+      meta: { requiresAuth: true },
       children: [
         {
           path: '/index',
@@ -45,11 +47,26 @@ export default new Router({
           path: '/index/userinfo',
           component: Userinfo,
         },{
-          path: '/index/adduser',
-          component: Adduser,
+          path: '/index/gzliu',
+          component: Gzliu,
         },{
-          path: '/index/jiform',
-          component: Jiform
+          path: '/index/diaodu',
+          component: Diaodu,
+        },{
+          path: '/index/dayyanghu',
+          component: Dayyanghu,
+        },{
+          path: '/index/renwu',
+          component: Renwu,
+        },{
+          path: '/index/e-file',
+          component: Efile,
+        },{
+          path: '/index/zichan',
+          component: Zichan,
+        },{
+          path: '/index/dayxuncha',
+          component: dayxuncha
         },{
           path: '/index/weixiu',
           component: Weixiu
@@ -57,46 +74,39 @@ export default new Router({
           path: '/index/yanghu',
           component: Yanghu
         },{
-          path: '/index/e-file',
-          component: Efile
-        },{
           path: '/index/quexian',
           component: Quexian
-        },{
-          path: '/index/addquexian',
-          component: Addquexian
-        },{
-          path: '/index/addyanghu',
-          component: Addyanghu
-        },{
-          path: '/index/editQuexain/:id',
-          component: Editquexian
-        },{
-          path: '/index/edituser/:id',
-          component: Edituser
-        },{
-          path: '/index/edityanghu/:id',
-          component: Edityanghu
-        },{
-          path: '/index/addE-file',
-          component: AddEfile
-        },{
-          path: '/index/editEfie/:id',
-          component: EditEfile
-        },{
-          path: '/index/addWeixiu',
-          component: AddWeixiu
-        },{
-          path: '/index/editWeixiu/:id',
-          component: Editweixiu
         }
-
-
-
       ]
     }
   ]
 })
+router.beforeEach((to, from, next) => { 
+  if (to.matched.some(record => record.meta.requiresAuth)) {  // 判断该路由是否需要登录权限
+    if (store.state.user) { 
+       // 通过vuex state获取当前的token是否存在
+       NProgress.start()
+        next();
+    }
+    else {
+        NProgress.start()
+        next({
+            path: '/login',
+            query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
+        })
+    }
+}
+else {
+    NProgress.start()
+    next();
+}
+});
+router.afterEach(() => {
+
+  NProgress.done()
+})
+
+export default router
 
 
 

@@ -1,35 +1,26 @@
 <template>
-         <el-dialog :visible.sync="dialog" append-to-body width="740px" :title="isAdd ? '新增电子档案' : '编辑电子档案'">
-            <el-form :inline="true" :model="bformLabelAlign" ref="formLabelAlign" size="small" label-width="120px">
-            <el-form-item label="出厂编号：" prop="ei_id">
-                <el-input v-model="bformLabelAlign.ei_id"></el-input>
+         <el-dialog :visible.sync="dialog" append-to-body width="780px" :title="isAdd ? '新增水闸调度调令' : '编辑水闸调度调令'">
+            <el-form :inline="true" :model="bformLabelAlign" ref="formLabelAlign" size="small" label-width="140px">
+            <el-form-item label="调度编号：" prop="do_id">
+                <el-input v-model="bformLabelAlign.do_id"></el-input>
             </el-form-item>
-            <el-form-item label="防护等级：" prop="ei_protectionlevel">
-                <el-input v-model="bformLabelAlign.ei_protectionlevel"></el-input>
+            <el-form-item label="调度依据：" prop="do_reason">
+                <el-input v-model="bformLabelAlign.do_reason"></el-input>
             </el-form-item>
-            <el-form-item label="标准代码：" prop="ei_code">
-                <el-input v-model="bformLabelAlign.ei_code"></el-input>
+            <el-form-item label="调度指令：" prop="do_instructions">
+                <el-input v-model="bformLabelAlign.do_instructions"></el-input>
             </el-form-item>
-            <el-form-item label="制造单位：" prop="ei_company">
-                <el-input v-model="bformLabelAlign.ei_company"></el-input>
+            <el-form-item label="调度指令下达人：" prop="do_giveacommand">
+                <el-input v-model="bformLabelAlign.do_giveacommand"></el-input>
             </el-form-item>
-            <el-form-item label="规格型号：" prop="ei_model">
-                <el-input v-model="bformLabelAlign.ei_model"></el-input>
+            <el-form-item label="调度指令接收人：" prop="do_receivecommands">
+                <el-input v-model="bformLabelAlign.do_receivecommands"></el-input>
             </el-form-item>
-            <el-form-item label="设备组：" prop="ei_group">
-                <el-input v-model="bformLabelAlign.ei_group"></el-input>
+            <el-form-item label="调度时间：" prop="do_time"> 
+                <el-date-picker type="date" placeholder="选择日期" v-model="bformLabelAlign.do_time" style="width: 200px;"></el-date-picker>
             </el-form-item>
-            
-            <el-form-item label="生产日期：" prop="ei_date">
-              
-                <el-date-picker type="date" placeholder="选择日期" v-model="bformLabelAlign.ei_date" style="width: 200px;"></el-date-picker>
-            
-            </el-form-item>
-            <el-form-item label="主要参数：" prop="ei_parameter">
-                <el-input type="textarea" v-model="bformLabelAlign.ei_parameter" style="width: 536px;"></el-input>
-            </el-form-item>
-            <el-form-item label="设备名称：" prop="ei_name">
-                <el-input type="textarea" v-model="bformLabelAlign.ei_name" style="width: 536px;"></el-input>
+            <el-form-item label="状态：" prop="do_state" style="display:none">
+                <el-input v-model="bformLabelAlign.do_state" style="width: 536px;" value="0"></el-input>
             </el-form-item>
             <el-form-item style="text-align: right;width: 100%;">
                <el-button type="primary" @click="addData()">保存信息</el-button>
@@ -66,6 +57,7 @@ export default {
     data() {
       return {
         dialog: false,
+        
       };
     },
     methods: {
@@ -80,7 +72,7 @@ export default {
         }).then(() => {
           if (this.id === 0) {
             console.log(defectRecord)
-             this.axios.post('/api/zsyf/addEquipmentInformation.do',defectRecord).then(res => {
+             this.axios.post('/api/zsyf/addDispatchingOrder.do',defectRecord).then(res => {
                 // this.$parent.getData()
                 this.$emit('handleUp',this.currPage)
                 this.$message({
@@ -95,7 +87,7 @@ export default {
               })
               return false
               }else{
-              this.axios.post('/api/zsyf/updEquipmentInformationByKey.do',defectRecord).then(res => {
+              this.axios.post('/api/zsyf/updDispatchingOrderByKey.do',defectRecord).then(res => {
                 this.$emit('handleUp',this.currPage)
                 this.$message({
                   type: 'success',
@@ -122,6 +114,7 @@ export default {
         }
         })
        this.open(defectRecord)
+       console.log(defectRecord)
     }
 },
 }

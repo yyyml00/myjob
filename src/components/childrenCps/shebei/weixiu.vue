@@ -1,30 +1,31 @@
 <template>
    <div class="weixiu">
-    <h1 class="page-title">设备维修统计表</h1> 
-       
+      <editWeixiu :id="id" ref="form" :isAdd="isAdd" :wformLabelAlign="wformLabelAlign" :currPage="currPage" @handleUp="handleUp"/>  
        <el-row>
-           <el-col :span="24"><div class="grid-content "> 
+           <el-col :span="4"><div class="grid-content " style="text-align: left;">
+           <el-button type="primary" size="mini" >设备维修表</el-button>
+           </div></el-col>
+           <el-col :span="20"><div class="grid-content "> 
              <div class="handle-box">
-               <router-link to="/index/addWeixiu">
-               <el-button type="primary" >新增维修记录</el-button>
-               </router-link>
-               <div class="flo" >
-               <el-button type="primary" size="mini">输入查询</el-button>
-               <div class="fl">
-                 <el-input
+               <el-button type="primary" size="mini" icon="el-icon-refresh" @click="getData(currPage)" >刷新</el-button>
+               <el-button type="primary" size="mini" icon="el-icon-plus" @click="add()">新增</el-button>
+                   <el-input
                         id="search-box"
+                        prefix-icon="el-icon-search"
+                        style="display:inline-block;width: 200px;"
                         v-model="search"
                         size="mini"
-                        placeholder="输入关键字搜索"/>
-               </div>
-               </div>
-               <el-divider></el-divider>
+                        clearable
+                        placeholder="输入设备名称搜索"/>
+                   <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" style="display:inline-block;" @click="searchData()">搜索</el-button>
              </div>
+             </div></el-col>
+             <el-col :span="24"><div class="grid-content ">
               <el-table
                     v-loading="loading"
                     id="mytable"
+                    :data="tableData"
                     ref="multipleTable"
-                    :data="tableData.filter(data => !search || data.Dr_name.toLowerCase().includes(search.toLowerCase()) || data.Dr_pipelinenumber.toLowerCase().includes(search.toLowerCase()))"
                     style="width: 100%"
                     >
                     <el-table-column
@@ -87,11 +88,14 @@
                     <template slot-scope="scope">
                         <el-button
                         size="mini"
-                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        type="primary"
+                        icon="el-icon-edit"
+                        @click="handleEdit(scope.$index, scope.row)"></el-button>
                         <el-button
                         size="mini"
                         type="danger"
-                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        icon="el-icon-delete"
+                        @click="handleDelete(scope.$index, scope.row)"></el-button>
                     </template>
                     </el-table-column>
                 </el-table>
@@ -112,7 +116,9 @@
 </template>
 <script>
 import { setTimeout } from 'timers';
+import editWeixiu from './editWeixiu'
 export default {
+     components: { editWeixiu },
      data() {
       return {
         tableData: [],
@@ -121,44 +127,68 @@ export default {
         totalPage: 0,
         pageSize: 0,
         currPage: 1,
-        loading: false
+        loading: false,
+        id: 0,
+        loading: false,
+        wformLabelAlign: {},
+        isAdd: false
       }
     },
     methods: {
-      handleEdit(index, row) {
-        let id = row.id
-        this.$router.push('/index/editWeixiu/' + id);
+       add() {
+        this.$refs.form.dialog = true
+        this.wformLabelAlign = {}
+        this.id = 0
+        this.isAdd = true
       },
+      searchData() {
+        let newArr = []
+        let val = this.search
+        newArr = this.tableData.filter(item => {
+         return item.r_name.indexOf(this.search) >= 0
+          })
+        this.tableData = newArr
+      },
+      handleUp(data) {
+          this.currPage = data;
+          this.getData(this.currPage)
+      },
+      handleEdit(index, row) {
+        this.id = row.id
+        this.isAdd = false
+        this.wformLabelAlign = row
+        // this.$router.push('/index/editEfie/' + this.id);
+         this.$refs.form.dialog = true
+      },
+      open(id) {
+        this.$confirm('你确认删除这条数据吗, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.axios.get('/api/zsyf/delRepairRecordByKey.do?id='+id).then(res => {
+             this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          let currPage = this.currPage
+         this.getData(currPage)
+        }).catch(err => {
+        
+            confirm('数据请求失败') 
+        })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });        
+        });
+      }, 
      handleDelete(index, row) {
         let id = row.id
-        this.axios.get('/api/zsyf/delRepairRecordByKey.do?id='+id).then(res => {
-
-        let currPage = this.currPage
-        this.axios.get('/api/zsyf/findRepairRecordByPage.do?currentPage='+currPage).then(res => {
-          if (res.status === 200) {
-            this.tableData = res.data.model.pagemsg.lists
-
-           this.totalPage = res.data.model.pagemsg.totalCount
-           this.pageSize = res.data.model.pagemsg.pageSize
-          } 
-      }).catch(err => {
-       
-          confirm('数据请求失败')
-     
-      })
-      
-      }).catch(err => {
-       
-          confirm('数据请求失败')
-       
-        
-      })
+        this.open(id)
 
       },
-      //   handleSelectionChange(val) {
-      //   this.multipleSelection = val;
-      //   // console.log(this.multipleSelection)
-      // },
       handleCurrentChange(val) {
         // console.log(`当前页: ${val}`);
         this.currPage = val
@@ -174,9 +204,9 @@ export default {
         }
       })
       },
-      getData() {
+      getData(data) {
         this.loading = true
-        let currPage = parseInt(this.currPage) 
+        let currPage = parseInt(data) 
         console.log(typeof currPage)
         this.axios.get('/api/zsyf/findRepairRecordByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
@@ -198,7 +228,7 @@ export default {
       }
     },
     created(){
-       this.getData()
+       this.getData(this.currPage)
        
     }
 }

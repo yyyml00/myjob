@@ -1,9 +1,9 @@
 <template>
    <div class="userInfo">
-     <edituser :id="id" ref="form" :isAdd="isAdd" :uformLabelAlign="uformLabelAlign" :currPage="currPage" @handleUp="handleUp"/>
+     <editxuncha :id="id" ref="form" :isAdd="isAdd" :xformLabelAlign="xformLabelAlign" :currPage="currPage" @handleUp="handleUp"/>
      <el-row>
            <el-col :span="4"><div class="grid-content " style="text-align: left;">
-           <el-button type="primary" size="mini" >人员信息档案</el-button>
+           <el-button type="primary" size="mini" >水闸日巡查记录</el-button>
            </div></el-col>
            <el-col :span="20"><div class="grid-content "> 
              <div class="handle-box">
@@ -36,44 +36,59 @@
                     style="width: 100%"
                     >
                     <el-table-column
-                    label="用户编号"
-                    prop="user_id"
-                    width="120">
+                    label="水闸名称"
+                    prop="i_name"
+                    width="100">
                     </el-table-column>
                     <el-table-column
-                    label="姓名"
-                    prop="user_name"
-                    width="120">
+                    label="记录时间"
+                    prop="i_date"
+                    width="100">
                     </el-table-column>
                     <el-table-column
-                    label="电话"
-                    prop="user_phone"
-                    width="120">
+                    label="工程设施完好情况"
+                    prop="i_facilities"
+                    width="150">
                     </el-table-column>
                     <el-table-column
-                    label="性别"
-                    prop="user_sex"
-                    width="120">
+                    label="闸门位置有无振动"
+                    prop="i_shock"
+                    width="150">
                     </el-table-column>
                     <el-table-column
-                    label="地址"
-                    prop="user_name"
-                    width="120">
+                    label="过闸水流形态"
+                    prop="i_flowpattern"
+                    width="150">
                     </el-table-column>
                     <el-table-column
-                    label="年龄"
-                    prop="user_age"
-                    width="120">
+                    label="闸区环境卫生情况"
+                    prop="i_hygiene"
+                    width="150">
                     </el-table-column>
                     <el-table-column
-                    label="所属部门"
-                    prop="user_department"
-                    width="120">
+                    label="自动监控系统是否正常"
+                    prop="i_monitor"
+                    width="170">
                     </el-table-column>
                     <el-table-column
-                    label="职位"
-                    prop="user_role"
+                    label="违章情况"
+                    prop="i_violation"
+                    width="100">
+                    </el-table-column>
+                     <el-table-column
+                    label="其他检查情况"
+                    prop="i_other"
                     width="120">
+                    </el-table-column>
+                     <el-table-column
+                    label="备注"
+                    prop="i_remarks"
+                    width="120">
+                    </el-table-column>
+                     <el-table-column
+                    label="检查人签字"
+                    prop="i_inspectorsignature"
+                    width="100">
                     </el-table-column>
                     <el-table-column
                     
@@ -106,17 +121,15 @@
                   :page-size="pageSize">
                 </el-pagination>
             </div></el-col>
-        </el-row>
-       
-       
+        </el-row> 
     </div> 
 </template>
 <script>
 import { setTimeout } from 'timers';
-import edituser from './edituser'
+import editxuncha from './editxuncha'
 import { constants } from 'zlib';
 export default {
-    components: { edituser },
+    components: { editxuncha },
      data() {
       return {
         tableData: [],
@@ -128,14 +141,14 @@ export default {
         loading: false,
         id: 0,
         loading: false,
-        uformLabelAlign: {},
+        xformLabelAlign: {},
         isAdd: false
       }
     },
     methods: {
       add() {
         this.$refs.form.dialog = true
-        this.uformLabelAlign = {}
+        this.xformLabelAlign = {}
         this.id = 0
         this.isAdd = true
       },
@@ -146,7 +159,7 @@ export default {
       handleEdit(index, row) {
         this.id = row.id
         this.isAdd = false
-        this.uformLabelAlign = row
+        this.xformLabelAlign = row
         // this.$router.push('/index/editEfie/' + this.id);
          this.$refs.form.dialog = true
       },
@@ -156,7 +169,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {  
-         this.axios.get('/api/zsyf/delUserByKey.do?id='+id).then(res => {
+         this.axios.get('/api/zsyf/delInspectionRecordsByKey.do?id='+id).then(res => {
            this.$message({
             type: 'success',
             message: '删除成功!'
@@ -183,7 +196,7 @@ export default {
       handleCurrentChange(val) {
         // console.log(`当前页: ${val}`);
         this.currPage = val
-        this.axios.get('/api/zsyf/findUserByPage.do?currentPage='+this.currPage).then(res => {
+        this.axios.get('/api/zsyf/findinspectionRecordsByPage.do?currentPage='+this.currPage).then(res => {
           if (res.status === 200) {
             this.tableData = res.data.model.pagemsg.lists
           //  this.totalPage = res.data.model.pagemsg.totalCount
@@ -198,7 +211,7 @@ export default {
       getData(data) {
         this.loading = true
         let currPage = parseInt(data) 
-        this.axios.get('/api/zsyf/findUserByPage.do?currentPage='+currPage).then(res => {
+        this.axios.get('/api/zsyf/findinspectionRecordsByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
             setTimeout(() => {
             this.loading = false
@@ -213,16 +226,7 @@ export default {
           confirm('数据请求失败')
         }
       })
-      },
-      searchData() {
-        let newArr = []
-        let val = this.search
-        newArr = this.tableData.filter(item => {
-         return item.user_name.indexOf(this.search) >= 0
-          })
-        this.tableData = newArr
       }
-      
     },
     created(){
        this.getData(this.currPage)

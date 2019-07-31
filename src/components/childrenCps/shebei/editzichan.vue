@@ -1,39 +1,45 @@
 <template>
-         <el-dialog :visible.sync="dialog" append-to-body width="740px" :title="isAdd ? '新增电子档案' : '编辑电子档案'">
+         <el-dialog :visible.sync="dialog" append-to-body width="740px" :title="isAdd ? '新增固定资产' : '编辑固定资产'">
             <el-form :inline="true" :model="bformLabelAlign" ref="formLabelAlign" size="small" label-width="120px">
-            <el-form-item label="出厂编号：" prop="ei_id">
-                <el-input v-model="bformLabelAlign.ei_id"></el-input>
+            <el-form-item label="资产编号：" prop="fa_id">
+                <el-input v-model="bformLabelAlign.fa_id"></el-input>
             </el-form-item>
-            <el-form-item label="防护等级：" prop="ei_protectionlevel">
-                <el-input v-model="bformLabelAlign.ei_protectionlevel"></el-input>
+            <el-form-item label="资产名称：" prop="fa_name">
+                <el-input v-model="bformLabelAlign.fa_name"></el-input>
             </el-form-item>
-            <el-form-item label="标准代码：" prop="ei_code">
-                <el-input v-model="bformLabelAlign.ei_code"></el-input>
+            <el-form-item label="实有数量/面积：" prop="fa_exnumber">
+                <el-input v-model="bformLabelAlign.fa_exnumber"></el-input>
             </el-form-item>
-            <el-form-item label="制造单位：" prop="ei_company">
-                <el-input v-model="bformLabelAlign.ei_company"></el-input>
+            <el-form-item label="实有原值：" prop="fa_value">
+                <el-input v-model="bformLabelAlign.fa_value"></el-input>
             </el-form-item>
-            <el-form-item label="规格型号：" prop="ei_model">
-                <el-input v-model="bformLabelAlign.ei_model"></el-input>
+            <el-form-item label="盘点结果：" prop="fa_result">
+                <el-input v-model="bformLabelAlign.fa_result"></el-input>
             </el-form-item>
-            <el-form-item label="设备组：" prop="ei_group">
-                <el-input v-model="bformLabelAlign.ei_group"></el-input>
+            <el-form-item label="使用状况：" prop="fa_situation">
+                <el-input v-model="bformLabelAlign.fa_situation"></el-input>
             </el-form-item>
-            
-            <el-form-item label="生产日期：" prop="ei_date">
-              
-                <el-date-picker type="date" placeholder="选择日期" v-model="bformLabelAlign.ei_date" style="width: 200px;"></el-date-picker>
-            
+            <el-form-item label="账面数量/面积：" prop="fa_bknumber">
+                <el-input v-model="bformLabelAlign.fa_bknumber"></el-input>
             </el-form-item>
-            <el-form-item label="主要参数：" prop="ei_parameter">
-                <el-input type="textarea" v-model="bformLabelAlign.ei_parameter" style="width: 536px;"></el-input>
+            <el-form-item label="账面价值：" prop="fa_bookvalue">
+                <el-input v-model="bformLabelAlign.fa_bookvalue"></el-input>
             </el-form-item>
-            <el-form-item label="设备名称：" prop="ei_name">
-                <el-input type="textarea" v-model="bformLabelAlign.ei_name" style="width: 536px;"></el-input>
+             <el-form-item label="规格型号：" prop="fa_model">
+                <el-input v-model="bformLabelAlign.fa_model"></el-input>
+            </el-form-item>
+            <el-form-item label="使用部门：" prop="fa_department">
+                <el-input v-model="bformLabelAlign.fa_department"></el-input>
+            </el-form-item>
+            <el-form-item label="使用人：" prop="fa_people">
+                <el-input v-model="bformLabelAlign.fa_people"></el-input>
+            </el-form-item>
+            <el-form-item label="存放地点：" prop="fa_addr">
+                <el-input v-model="bformLabelAlign.fa_addr"></el-input>
             </el-form-item>
             <el-form-item style="text-align: right;width: 100%;">
                <el-button type="primary" @click="addData()">保存信息</el-button>
-                <el-button @click="resetForm('formLabelAlign')" type="danger">清除信息</el-button>
+                <el-button @click="resetform('formLabelAlign')" type="danger">清除信息</el-button>
             </el-form-item>
             </el-form>
          </el-dialog>
@@ -69,8 +75,8 @@ export default {
       };
     },
     methods: {
-      resetForm(formLabelAlign) {
-        this.$refs[formLabelAlign].resetFields();
+      resetform(formLabelAlign) {
+        this.$refs[formLabelAlign].resetfields();
       },
      open(defectRecord) {
         this.$confirm('你是否要保存此编辑内容, 是否继续?', '提示', {
@@ -80,7 +86,7 @@ export default {
         }).then(() => {
           if (this.id === 0) {
             console.log(defectRecord)
-             this.axios.post('/api/zsyf/addEquipmentInformation.do',defectRecord).then(res => {
+             this.axios.post('/api/zsyf/addFixedAssets.do',defectRecord).then(res => {
                 // this.$parent.getData()
                 this.$emit('handleUp',this.currPage)
                 this.$message({
@@ -95,7 +101,7 @@ export default {
               })
               return false
               }else{
-              this.axios.post('/api/zsyf/updEquipmentInformationByKey.do',defectRecord).then(res => {
+              this.axios.post('/api/zsyf/updFixedAssetsByKey.do',defectRecord).then(res => {
                 this.$emit('handleUp',this.currPage)
                 this.$message({
                   type: 'success',

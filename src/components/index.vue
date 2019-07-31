@@ -1,95 +1,73 @@
 <template>
-  <el-container>
+  <el-container id="fisrt-container">
   <el-header>
     <h1>智慧水闸管理系统</h1>
     <div class="loginStatu">
-      <el-menu
-        :default-active="activeIndex2"
-        class="el-menu-demo"
-        mode="horizontal"
-        background-color="rgb(87, 174, 255)"
-        text-color="#fff"
-        active-text-color="#ffd04b">
-
-        <el-menu-item index="7" ><i class="el-icon-user-solid"></i>已登录</el-menu-item>
-        <el-menu-item index="8" >个人中心</el-menu-item>
-        <el-menu-item index="9" >退出登录</el-menu-item>
-
-        </el-menu>
     </div>
   </el-header>
-  <el-container >
-    <el-aside width="200px" id="my-aside">
+  <el-container id="second-container">
+    <el-aside width="180px" id="my-aside">
         <el-menu
-        default-active="2"
+        :default-active="depath"
         class="el-menu-vertical-demo"
-        background-color="rgb(87, 174, 255)"
+        router
+        unique-opened
+        background-color="#00456b"
         text-color="#fff"
-        active-text-color="#ffd04b"
         >
-        <router-link to="/index">
-        <el-menu-item index="2">
+      <el-menu-item index="/index">
         <i class="el-icon-menu"></i>
         <span slot="title">首页</span>
-        </el-menu-item>
-        </router-link>
-         <el-submenu index="1">
+      </el-menu-item>
+      <el-submenu index="1">
         <template slot="title">
-        <span>设备管理</span>
+          <i class="el-icon-s-tools"></i>
+          <span>设备管理</span>
         </template>
-        <el-menu-item-group>
-          <router-link to="/index/weixiu">
-          <el-menu-item index="1-1">设备维修记录</el-menu-item>
-          </router-link>
-          <router-link to="/index/e-file">
-          <el-menu-item index="1-2">设备电子档案</el-menu-item>
-          </router-link>
-          <router-link to="/index/quexian">
-          <el-menu-item index="1-3">设备缺陷登记</el-menu-item>
-          </router-link>
-          <router-link to="/index/yanghu">
-          <el-menu-item index="1-4">设备养护记录</el-menu-item>
-          </router-link>
-        </el-menu-item-group>
-        </el-submenu>
-        <el-submenu index="3">
+          <el-menu-item index="/index/zichan">固定资产</el-menu-item>
+          <el-menu-item index="/index/weixiu">水闸维修记录</el-menu-item>
+          <el-menu-item index="/index/e-file">设备电子档案</el-menu-item>
+          <el-menu-item index="/index/quexian">水闸缺陷记录</el-menu-item>
+          <el-menu-item index="/index/yanghu">水闸养护记录</el-menu-item>
+          <el-menu-item index="/index/dayyanghu">水闸日养护记录</el-menu-item>
+      </el-submenu>
+      <el-submenu index="2">
         <template slot="title">
-        <span>人员管理</span>
+          <i class="el-icon-s-operation"></i>
+          <span>运行管理</span>
         </template>
-        <el-menu-item-group>
-          <router-link to="/index/userinfo">
-            <el-menu-item index="3-1">用户信息档案</el-menu-item>
-          </router-link>
-          <router-link to="/index/jiform">
-          <el-menu-item index="3-2">日巡查记录信息</el-menu-item>
-          </router-link>
-        </el-menu-item-group>
+        <el-menu-item index="/index/dayxuncha">水闸日巡查记录</el-menu-item>
+        <el-menu-item index="/index/diaodu">水闸调度调令</el-menu-item> 
+        <!-- <el-menu-item index="/index/gzliu">流程管理</el-menu-item> -->
+         <el-submenu index="1-4">
+          <template slot="title">流程管理</template>
+          <el-menu-item index="/index/gzliu">部署管理</el-menu-item>
+          <el-menu-item index="/index/renwu">任务管理</el-menu-item>
         </el-submenu>
-        <el-submenu index="4">
+      </el-submenu><el-submenu index="3">
         <template slot="title">
-        <span>导航一</span>
+          <i class="el-icon-s-custom"></i>
+          <span>人员管理</span>
         </template>
-        <el-menu-item-group>
-          <el-menu-item index="1-1">选项1</el-menu-item>
-          <el-menu-item index="1-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        </el-submenu>
-        <el-submenu index="5">
-        <template slot="title">
-        <span>导航一</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="1-1">选项1</el-menu-item>
-          <el-menu-item index="1-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        </el-submenu>
-        </el-menu>
+          <el-menu-item index="/index/userinfo">人员信息档案</el-menu-item>   
+      </el-submenu> 
+    </el-menu>
     </el-aside>
     <el-container>
       <el-main>
+       <div class="tianqi">
+          <el-row style="margin-top:0px;">
+            <el-col :span="14"><div class="grid-content"></div></el-col>
+            <el-col :span="10"><div class="grid-content">
+              <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=tz&skin=pitaya" frameborder="0" width="100%" height="30" allowtransparency="true"></iframe>
+            </div></el-col>
+          </el-row>
+      </div>
+      <div class="view"> 
        <transition name="main" mode="out-in">
       <router-view></router-view>
        </transition>
+       </div>
       </el-main>
     </el-container>
   </el-container>
@@ -104,48 +82,70 @@ export default {
 
     data() {
       return {
-        activeIndex2:''
+        // isCollapse: true
+        depath: '/index/weixiu'
       }
     },
+    methods: {
+      getWeather () {
+      this.axios.get('https://www.tianqiapi.com/api/?version=v1&city=合肥' ).then(function(reponse){
+			}).catch(() => {})
+    },
+      getRouter () {
+        return this.depath = this.$route.path
+      }
+    },
+    created() {
+      this.getWeather()
+      this.getRouter ()
+    },
+     watch: {
+    // 如果路由有变化，会再次执行该方法
+    '$route': 'getRouter'
+  },
   
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   /* .grid-content {
         box-shadow: 0 0 20px rgb(168, 162, 162);
     } */
 
   .el-header{
-    background-color: rgb(87, 174, 255);
-    height: 60px;
-    line-height: 60px;
-    margin-bottom: 6px;
+    background-color:#00456b;
+    height: 10%;
+    margin-bottom: 2px;
     box-shadow: 0 0 4px rgb(87, 174, 255);
   }
   .el-header > h1 {
     color: rgb(255, 255, 255);
     width: 200px;
     float: left;
+    line-height: 60px;
     /* display: inline-block; */
   }
   .el-header > div {
     /* width: 200px; */
     height: 100%;
-    float: right;
-    
+    float: right; 
   }
-  
   .el-aside {
-    background-color: #D3DCE6;
+    background-color: #00456b;
     text-align: left;
+    overflow: hidden;
     min-height: 600px;
+  }
+  .el-aside .el-menu-item{
+    padding: 0 30px;
   }
   
   .el-main {
-    background-color: #E9EEF3;
-    min-height: 600px;
+    /* background-color: #E9EEF3; */
+    padding: 0px;
+  }
+  .el-main .view{
+    padding: 20px;
   }
   .el-icon-user-solid {
     color: rgb(252, 252, 253);
@@ -162,7 +162,14 @@ export default {
     position: absolute;
     transition: all 0.2s;
   } */
-
+  .tianqi {
+    height: 40px;
+    width: 100%;
+    padding: 10px 20px;;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgb(228, 228, 228);
+    /* background-color: rgb(121, 159, 207); */
+  }
 
  
 </style>
