@@ -1,6 +1,6 @@
 <template>
          <el-dialog :visible.sync="dialog" append-to-body width="740px" :title="isAdd ? '新增固定资产' : '编辑固定资产'">
-            <el-form :inline="true" :model="bformLabelAlign" ref="formLabelAlign" size="small" label-width="120px">
+            <el-form :inline="true" :model="bformLabelAlign" ref="myform" size="small" label-width="120px">
             <el-form-item label="资产编号：" prop="fa_id">
                 <el-input v-model="bformLabelAlign.fa_id"></el-input>
             </el-form-item>
@@ -39,14 +39,14 @@
             </el-form-item>
             <el-form-item style="text-align: right;width: 100%;">
                <el-button type="primary" @click="addData()">保存信息</el-button>
-                <el-button @click="resetform('formLabelAlign')" type="danger">清除信息</el-button>
+                <el-button @click="resetform('myform')" type="danger">清除信息</el-button>
             </el-form-item>
             </el-form>
          </el-dialog>
 </template>
 <script>
 export default {
-    name: 'jiform',
+    name: 'zichan',
      props: {
         isAdd: {
           type: Boolean,
@@ -85,8 +85,8 @@ export default {
           type: 'warning'
         }).then(() => {
           if (this.id === 0) {
-            console.log(defectRecord)
              this.axios.post('/api/zsyf/addFixedAssets.do',defectRecord).then(res => {
+                this.dialog = false
                 // this.$parent.getData()
                 this.$emit('handleUp',this.currPage)
                 this.$message({
@@ -102,6 +102,7 @@ export default {
               return false
               }else{
               this.axios.post('/api/zsyf/updFixedAssetsByKey.do',defectRecord).then(res => {
+                 this.dialog = false
                 this.$emit('handleUp',this.currPage)
                 this.$message({
                   type: 'success',

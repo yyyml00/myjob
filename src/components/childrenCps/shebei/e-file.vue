@@ -8,7 +8,7 @@
            <el-col :span="20"><div class="grid-content "> 
              <div class="handle-box">
                <el-button type="primary" size="mini" icon="el-icon-refresh" @click="getData(currPage)">刷新</el-button>
-              
+               <el-button type="primary" size="mini" icon="el-icon-download" @click="handleDownload()">导出</el-button>
                <el-button type="primary" size="mini" icon="el-icon-plus" @click="add()">新增</el-button>
           
                  <!-- <el-input
@@ -35,9 +35,19 @@
                     :data='tableData'
                     style="width: 100%"
                     >
+                     <el-table-column
+                    label="出厂编号"
+                    prop="ei_id"
+                    width="120">
+                    </el-table-column>
                     <el-table-column
                     label="生产日期"
                     prop="ei_date"
+                    width="120">
+                    </el-table-column>
+                     <el-table-column
+                    label="设备名称"
+                    prop="ei_name"
                     width="120">
                     </el-table-column>
                     <el-table-column
@@ -48,11 +58,6 @@
                     <el-table-column
                     label="防护等级"
                     prop="ei_protectionlevel"
-                    width="120">
-                    </el-table-column>
-                     <el-table-column
-                    label="出厂编号"
-                    prop="ei_id"
                     width="120">
                     </el-table-column>
                     <el-table-column
@@ -68,11 +73,6 @@
                     <el-table-column
                     label="主要参数"
                     prop="ei_parameter"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="设备名称"
-                    prop="ei_name"
                     width="120">
                     </el-table-column>
                     <el-table-column
@@ -135,6 +135,21 @@ export default {
       }
     },
     methods: {
+      handleDownload() {
+        this.downloadLoading = true
+        require.ensure([], () => {
+          const { export_json_to_excel } = require('@/vendor/Export2Excel')
+          const tHeader = ['出厂编号', '规格型号', '防护等级','生产日期', '标准代号', '制造单位','主要参数', '设备名称', '设备组']
+          const filterVal = ['ei_id', 'ei_model', 'ei_protectionlevel','ei_date', 'ei_code', 'ei_company','ei_parameter', 'ei_name', 'ei_group']
+          const list = this.tableData
+          const data = this.formatJson(filterVal, list)
+          export_json_to_excel(tHeader, data, '设备电子档案excel')
+          this.downloadLoading = false
+        })
+      },
+      formatJson(filterVal, jsonData) {
+        return jsonData.map(v => filterVal.map(j => v[j]))
+      },
       handleUp(data) {
           this.currPage = data;
           this.getData(this.currPage)

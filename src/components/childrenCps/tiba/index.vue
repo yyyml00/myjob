@@ -1,9 +1,9 @@
 <template>
-   <div class="dayxuncha">
-     <editxuncha :id="id" ref="form" :isAdd="isAdd" :xformLabelAlign="xformLabelAlign" :currPage="currPage" @handleUp="handleUp"/>
+   <div class="diba">
+     <editdiba :id="id" ref="form" :isAdd="isAdd" :xformLabelAlign="xformLabelAlign" :currPage="currPage" @handleUp="handleUp"/>
      <el-row>
            <el-col :span="4"><div class="grid-content " style="text-align: left;">
-           <el-button type="primary" size="mini" >水闸日巡查记录</el-button>
+           <el-button type="primary" size="mini" >堤坝日巡查</el-button>
            </div></el-col>
            <el-col :span="20"><div class="grid-content "> 
              <div class="handle-box">
@@ -36,62 +36,31 @@
                     style="width: 100%"
                     >
                     <el-table-column
-                    label="水闸名称"
-                    prop="i_name"
-                    width="100">
+                    label="堤坝名称"
+                    prop="dp_name"
+                    width="200">
                     </el-table-column>
                     <el-table-column
                     label="记录时间"
-                    prop="i_date"
-                    width="100">
+                    prop="dp_date"
+                    width="200">
                     </el-table-column>
                     <el-table-column
-                    label="工程设施完好情况"
-                    prop="i_facilities"
-                    width="150">
+                    label="巡查情况"
+                    prop="dp_situation"
+                    width="200">
                     </el-table-column>
                     <el-table-column
-                    label="闸门位置有无振动"
-                    prop="i_shock"
-                    width="150">
+                    label="处理意见"
+                    prop="dp_opinion"
+                    width="200">
                     </el-table-column>
                     <el-table-column
-                    label="过闸水流形态"
-                    prop="i_flowpattern"
-                    width="150">
-                    </el-table-column>
-                    <el-table-column
-                    label="闸区环境卫生情况"
-                    prop="i_hygiene"
-                    width="150">
-                    </el-table-column>
-                    <el-table-column
-                    label="自动监控系统是否正常"
-                    prop="i_monitor"
-                    width="170">
-                    </el-table-column>
-                    <el-table-column
-                    label="违章情况"
-                    prop="i_violation"
-                    width="100">
-                    </el-table-column>
-                     <el-table-column
-                    label="其他检查情况"
-                    prop="i_other"
-                    width="120">
-                    </el-table-column>
-                     <el-table-column
-                    label="备注"
-                    prop="i_remarks"
-                    width="120">
-                    </el-table-column>
-                     <el-table-column
-                    label="检查人签字"
-                    prop="i_inspectorsignature"
-                    width="100">
-                    </el-table-column>
-                    <el-table-column
-                    
+                    label="巡查人（签字）"
+                    prop="dp_sign"
+                    width="200">
+                    </el-table-column> 
+                    <el-table-column 
                     label="操作"
                     width="160">
                     <!-- <template slot="header" slot-scope="">
@@ -126,10 +95,10 @@
 </template>
 <script>
 import { setTimeout } from 'timers';
-import editxuncha from './editxuncha'
+import editdiba from './editdiba'
 import { constants } from 'zlib';
 export default {
-    components: { editxuncha },
+    components: { editdiba },
      data() {
       return {
         tableData: [],
@@ -169,7 +138,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {  
-         this.axios.get('/api/zsyf/delInspectionRecordsByKey.do?id='+id).then(res => {
+         this.axios.get('/api/zsyf/delDikePatrolByKey.do?id='+id).then(res => {
            this.$message({
             type: 'success',
             message: '删除成功!'
@@ -196,7 +165,7 @@ export default {
       handleCurrentChange(val) {
         // console.log(`当前页: ${val}`);
         this.currPage = val
-        this.axios.get('/api/zsyf/findinspectionRecordsByPage.do?currentPage='+this.currPage).then(res => {
+        this.axios.get('/api/zsyf/findDikePatrolByPage.do?currentPage='+this.currPage).then(res => {
           if (res.status === 200) {
             this.tableData = res.data.model.pagemsg.lists
           //  this.totalPage = res.data.model.pagemsg.totalCount
@@ -211,12 +180,14 @@ export default {
       getData(data) {
         this.loading = true
         let currPage = parseInt(data) 
-        this.axios.get('/api/zsyf/findinspectionRecordsByPage.do?currentPage='+currPage).then(res => {
+        this.axios.get('/api/zsyf/findDikePatrolByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
             setTimeout(() => {
             this.loading = false
           }, 400);
+          console.log(res)
             this.tableData = res.data.model.pagemsg.lists
+            console.log(this.tableData)
            this.totalPage = res.data.model.pagemsg.totalCount
            this.pageSize = res.data.model.pagemsg.pageSize
           //  this.loading = false

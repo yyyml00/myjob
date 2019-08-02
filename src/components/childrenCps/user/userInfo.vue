@@ -23,7 +23,7 @@
                         v-model="search"
                         size="mini"
                         clearable
-                        placeholder="输入设备名称搜索"/>
+                        placeholder="输入姓名搜索"/>
                    <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" style="display:inline-block;" @click="searchData()">搜索</el-button>
              </div>
              </div></el-col>

@@ -1,5 +1,5 @@
 <template>
-         <el-dialog :visible.sync="dialog" append-to-body width="780px" :title="isAdd ? '新增电子档案' : '编辑电子档案'">
+         <el-dialog :visible.sync="dialog" append-to-body width="780px" :title="isAdd ? '新增日养护记录' : '编辑日养护记录'">
             <el-form :inline="true" :model="bformLabelAlign" ref="formLabelAlign" size="small" label-width="140px">
              <el-form-item label="水闸名称：" prop="mr_name">
                 <el-input v-model="bformLabelAlign.mr_name"></el-input>
@@ -14,63 +14,63 @@
             <el-col :span="6"><div class="grid-content">项目内容</div></el-col>
             <el-col :span="12"><div class="grid-content">养护实施情况</div></el-col>
             <el-col :span="6"><div class="grid-content">养护人员签字</div></el-col>
-            <el-col :span="6"><div class="grid-content">机房内保洁</div></el-col>
+            <el-col :span="6"><div class="grid-content">1.机房内保洁</div></el-col>
             <el-col :span="12"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_cleaning"></el-input>    
             </div></el-col>
             <el-col :span="6"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_sign_1"></el-input>   
             </div></el-col>
-            <el-col :span="6"><div class="grid-content">启闭机养护</div></el-col>
+            <el-col :span="6"><div class="grid-content">2.启闭机养护</div></el-col>
             <el-col :span="12"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_hoist" style="width: 100%;height: 100%;border: 0px"></el-input>    
             </div></el-col>
             <el-col :span="6"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_sign_2" style="width: 100%;height: 100%;"></el-input>   
             </div></el-col>
-            <el-col :span="6"><div class="grid-content">钢丝绳养护</div></el-col>
+            <el-col :span="6"><div class="grid-content">3.钢丝绳养护</div></el-col>
             <el-col :span="12"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_rope" style="width: 100%;height: 100%;"></el-input>    
             </div></el-col>
             <el-col :span="6"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_sign_3" style="width: 100%;height: 100%;"></el-input>   
             </div></el-col>
-            <el-col :span="6"><div class="grid-content">电气设备养护</div></el-col>
+            <el-col :span="6"><div class="grid-content">4.电气设备养护</div></el-col>
             <el-col :span="12"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_electric" style="width: 100%;height: 100%;"></el-input>    
             </div></el-col>
             <el-col :span="6"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_sign_4" style="width: 100%;height: 100%;"></el-input>   
             </div></el-col>
-            <el-col :span="6"><div class="grid-content">闸门养护</div></el-col>
+            <el-col :span="6"><div class="grid-content">5.闸门养护</div></el-col>
             <el-col :span="12"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_sluicegate" style="width: 100%;height: 100%;"></el-input>    
             </div></el-col>
             <el-col :span="6"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_sign_5" style="width: 100%;height: 100%;"></el-input>   
             </div></el-col>
-            <el-col :span="6"><div class="grid-content">闸门上下游漂浮物清除</div></el-col>
+            <el-col :span="6"><div class="grid-content">6.闸门上下游漂浮物清除</div></el-col>
             <el-col :span="12"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_float" style="width: 100%;height: 100%;"></el-input>    
             </div></el-col>
             <el-col :span="6"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_sign_6" style="width: 100%;height: 100%;"></el-input>   
             </div></el-col>
-            <el-col :span="6"><div class="grid-content">闸区卫生</div></el-col>
+            <el-col :span="6"><div class="grid-content">7.闸区卫生</div></el-col>
             <el-col :span="12"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_hygiene" style="width: 100%;height: 100%;"></el-input>    
             </div></el-col>
             <el-col :span="6"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_sign_7" style="width: 100%;height: 100%;"></el-input>   
             </div></el-col>
-            <el-col :span="6"><div class="grid-content">堤防养护</div></el-col>
+            <el-col :span="6"><div class="grid-content">8.堤防养护</div></el-col>
             <el-col :span="12"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_dykes" style="width: 100%;height: 100%;"></el-input>    
             </div></el-col>
             <el-col :span="6"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_sign_8" style="width: 100%;height: 100%;"></el-input>   
             </div></el-col>
-            <el-col :span="6"><div class="grid-content">其他养护项目</div></el-col>
+            <el-col :span="6"><div class="grid-content">9.其他养护项目</div></el-col>
             <el-col :span="12"><div class="grid-content">
             <el-input v-model="bformLabelAlign.mr_project" style="width: 100%;height: 100%;"></el-input>    
             </div></el-col>
@@ -127,9 +127,9 @@ export default {
           type: 'warning'
         }).then(() => {
           if (this.id === 0) {
-            console.log(defectRecord)
              this.axios.post('/api/zsyf/addMaintenanceRecords.do',defectRecord).then(res => {
                 // this.$parent.getData()
+                 this.dialog = false
                 this.$emit('handleUp',this.currPage)
                 this.$message({
                   type: 'success',
@@ -144,6 +144,7 @@ export default {
               return false
               }else{
               this.axios.post('/api/zsyf/updMaintenanceRecordsByKey.do',defectRecord).then(res => {
+                 this.dialog = false
                 this.$emit('handleUp',this.currPage)
                 this.$message({
                   type: 'success',

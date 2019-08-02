@@ -8,6 +8,7 @@
            <el-col :span="20"><div class="grid-content "> 
              <div class="handle-box">
                <el-button type="primary" size="mini" icon="el-icon-refresh" >刷新</el-button>
+               <el-button type="primary" size="mini" icon="el-icon-download" @click="handleDownload()">导出</el-button>
                <el-button type="primary" size="mini" icon="el-icon-plus" @click="add()">新增</el-button>
                  <!-- <el-input
                         id="search-box"
@@ -135,6 +136,18 @@ export default {
       }
     },
     methods: {
+      handleDownload() {
+        this.downloadLoading = true
+        require.ensure([], () => {
+          const { export_json_to_excel } = require('@/vendor/Export2Excel')
+          const tHeader = ['设备编号', '流水号', '设备名称','缺陷类型', '缺陷表述', '发现人','发现时间', '记录人', '记录时间', '后续处理情况记录']
+          const filterVal = ['ei_id', 'dr_pipelinenumber', 'dr_name','dr_type', 'dr_content', 'dr_discoverer','dr_discoverertime', 'dr_reportperson', 'dr_reporttime', 'dr_processing']
+          const list = this.tableData
+          const data = this.formatJson(filterVal, list)
+          export_json_to_excel(tHeader, data, '设备缺陷excel')
+          this.downloadLoading = false
+        })
+      },
       add() {
           this.$refs.form.dialog = true
           this.qformLabelAlign = {}

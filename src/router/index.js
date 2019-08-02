@@ -13,7 +13,9 @@ import Renwu from '@/components/childrenCps/gzliu/renwu'
 import Userinfo from '@/components/childrenCps/user/userInfo'
 import dayxuncha from '@/components/childrenCps/xuncha/dayxuncha'
 import Weixiu from '@/components/childrenCps/shebei/weixiu'
+import Jiaojieban from '@/components/childrenCps/jiaojieban/index'
 import Yanghu from '@/components/childrenCps/shebei/yanghu'
+import Diba from '@/components/childrenCps/tiba/index'
 import Efile from '@/components/childrenCps/shebei/e-file'
 import Zichan from '@/components/childrenCps/shebei/zichan'
 import Quexian from '@/components/childrenCps/shebei/quexian'
@@ -50,8 +52,14 @@ Vue.use(Router)
           path: '/index/gzliu',
           component: Gzliu,
         },{
+          path: '/index/jiaojieban',
+          component: Jiaojieban,
+        },{
           path: '/index/diaodu',
           component: Diaodu,
+        },{
+          path: '/index/diba',
+          component: Diba,
         },{
           path: '/index/dayyanghu',
           component: Dayyanghu,
@@ -83,7 +91,7 @@ Vue.use(Router)
 })
 router.beforeEach((to, from, next) => { 
   if (to.matched.some(record => record.meta.requiresAuth)) {  // 判断该路由是否需要登录权限
-    if (store.state.user) { 
+    if (store.state.username || !store.state.username === '') { 
        // 通过vuex state获取当前的token是否存在
        NProgress.start()
         next();

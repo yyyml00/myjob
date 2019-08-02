@@ -188,18 +188,7 @@
                   :page-size="pageSize">
                 </el-pagination>
             </div></el-col>
-            <el-col :span="24"><div class="grid-content ">
-              
-                <form action="http://192.168.11.101:8080/zsyf/deploymentByZip.do" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file" id="file">
-                    <input type="text" name="deploymentname" id="text">
-                    <button type="submit" class="sub">提交</button>
-                </form>
-                
-              </div></el-col>
         </el-row>
-       
-       
     </div> 
 </template>
 <script>

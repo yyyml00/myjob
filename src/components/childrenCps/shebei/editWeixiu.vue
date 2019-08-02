@@ -9,33 +9,27 @@
             </el-form-item> -->
             <el-form-item label="修理内容：" prop="r_neirong">
                 <el-input v-model="wformLabelAlign.r_neirong"></el-input>
-            </el-form-item>
-            <el-form-item label="养护修理实施情况：" prop="r_Implementation">
-                <el-input v-model="wformLabelAlign.r_Implementation"></el-input>
-            </el-form-item>
-            <el-form-item label="耗用人工物料经费：" prop="r_resources">
-                <el-input v-model="wformLabelAlign.r_resources"></el-input>
-            </el-form-item>
-            
-            <el-form-item label="结束时间：" prop="r_endtime">
-              
+            </el-form-item>           
+            <el-form-item label="结束时间：" prop="r_endtime">           
                 <el-date-picker type="date" placeholder="选择日期" v-model="wformLabelAlign.r_endtime" style="width: 200px;"></el-date-picker>
-            
             </el-form-item>
-            <el-form-item label="开始时间：" prop="r_runtime">
-              
-                <el-date-picker type="date" placeholder="选择日期" v-model="wformLabelAlign.r_runtime" style="width: 200px;"></el-date-picker>
-            
+            <el-form-item label="开始时间：" prop="r_runtime">         
+                <el-date-picker type="date" placeholder="选择日期" v-model="wformLabelAlign.r_runtime" style="width: 200px;"></el-date-picker>    
             </el-form-item>
-            
             <el-form-item label="参与人员签字：" prop="r_staffsignature">
-                <el-input type="textarea" v-model="wformLabelAlign.r_staffsignature" style="width: 565px;"></el-input>
+                <el-input v-model="wformLabelAlign.r_staffsignature"></el-input>
             </el-form-item>
             <el-form-item label="分管领导签字：" prop="r_leadersignature">
-                <el-input type="textarea" v-model="wformLabelAlign.r_leadersignature" style="width: 565px;"></el-input>
+                <el-input v-model="wformLabelAlign.r_leadersignature"></el-input>
             </el-form-item>
             <el-form-item label="设备编号：" prop="ei_id">
                 <el-input v-model="wformLabelAlign.ei_id"></el-input>
+            </el-form-item>
+             <el-form-item label="养护修理实施情况：" prop="r_Implementation">
+                <el-input type="textarea" v-model="wformLabelAlign.r_Implementation" style="width: 565px;"></el-input>
+            </el-form-item>
+            <el-form-item label="耗用人工物料经费：" prop="r_resources">
+                <el-input type="textarea" v-model="wformLabelAlign.r_resources" style="width: 565px;"></el-input>
             </el-form-item>
             <el-form-item style="text-align: right;width: 100%;">
                <el-button type="primary" @click="addData()">保存信息</el-button>
@@ -86,6 +80,7 @@ export default {
         }).then(() => {
           if (this.id === 0) {
             this.axios.post('/api/zsyf/addRepairRecord.do',defectRecord).then(res => {
+               this.dialog = false
               this.$emit('handleUp',this.currPage)
               this.$message({
                 type: 'success',
@@ -99,6 +94,7 @@ export default {
             })
           }else{
              this.axios.post('/api/zsyf/updRepairRecordByKey.do',defectRecord).then(res => {
+                this.dialog = false
                this.$emit('handleUp',this.currPage)
                 this.$message({
                   type: 'success',

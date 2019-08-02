@@ -1,5 +1,7 @@
 <template>
       <div class="renwu">
+        <banli :taskId="taskId" :commentlist="commentlist" :pvminfo="pvminfo" ref="form" :isAdd="isAdd" :bformLabelAlign="bformLabelAlign" @getData="getData"/> 
+        <jieban :mytaskId="mytaskId" :mycommentlist="mycommentlist" :mypvminfo="mypvminfo" ref="myform" :isAdd="isAdd" :myformLabelAlign="myformLabelAlign" @getData="getData"/> 
         <el-row>
            <el-col :span="4"><div class="grid-content " style="text-align: left;">
            <el-button type="primary" size="mini" >任务管理</el-button>
@@ -48,7 +50,7 @@
                         <el-button
                         size="mini"
                         type="text"
-                        @click="handleDelete(scope.$index, scope.row)">查看当前流程图</el-button>
+                        >查看当前流程图</el-button>
                     </template>
                     </el-table-column>
                 </el-table>
@@ -57,75 +59,61 @@
       </div>
 </template>
 <script>
+import banli from './banli'
+import jieban from './jieban'
 export default {
+    components: { banli ,jieban},
     data() {
       return {
         tableData: [],
         // multipleSelection: [],
-        search: '',
-        totalPage: 0, 
-        pageSize: 0,
-        currPage: 1,
-        id: 0,
         loading: false,
+        commentlist: [],
         bformLabelAlign: {},
         isAdd: false,
+        pvminfo: [],
+        taskId: '',
+        mytaskId: '',
+        mypvminfo: [],
+        myformLabelAlign: {},
+        mycommentlist: []
       }
     },
     methods: {
       handleEdit(index, row) {
-        this.id = row.id
         this.isAdd = false
-        this.bformLabelAlign = row
-        // this.$router.push('/index/editEfie/' + this.id);
-         this.$refs.form.dialog = true
-      },
-      handleDelete(index, row) {
-        let id = row.id
-        this.open(id)
-      },
-        open(id) {
-        this.$confirm('你确认删除这条数据吗, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-           this.axios.get('/api/zsyf/delProcessDifnitionByKey.do?id='+id).then(res => {
-              this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-          this.loading = true 
-        let user_name = localStorage.getItem('username') 
-
-        this.axios.get('/api/zsyf/findPersonTask.do?user_name='+user_name).then(res => {
-          this.loading = false
-          var that = this
-          for (let i = 0; i < res.data.model.task.length; i++) {
-           let resTime = ""
-            resTime = res.data.model.task[i].CreateTime
-            res.data.model.task[i].CreateTime = that.moment(resTime).format("YYYY-MM-DD");
-            that.tableData.push(res.data.model.task[i])
-          }  
-      }).catch(err => {
-        if (err.status === 500) {
-          confirm('数据请求失败')
+        this.taskId = row.Id
+        let parme = {}
+        let that = this
+        parme.taskId = row.Id
+        parme.processInstanceId = row.ProcessInstanceId
+        let taskName = row.Name
+        if (taskName === '指令下达人' || taskName === '指令接收人' || taskName === '操作员') {
+          var defectRecord = that.qs.stringify(parme)
+        that.axios.post('/api/zsyf/competeTask.do',defectRecord).then(res => {
+               that.bformLabelAlign = res.data.model.dispatchingOrder
+               that.commentlist = res.data.model.commentlist
+               that.pvminfo = res.data.model.pvminfo
+              }).catch(err => {
+                
+              })
+         that.$refs.form.dialog = true
+        }else if (taskName === '当班人员' || taskName === '接班人员') {
+           var defectRecord = that.qs.stringify(parme)
+        that.axios.post('/api/zsyf/competeTask.do',defectRecord).then(res => {
+               that.myformLabelAlign = res.data.model.changeShifts
+               that.mycommentlist = res.data.model.commentlist
+               that.mypvminfo = res.data.model.pvminfo
+               that.mytaskId = row.Id
+              }).catch(err => {
+                
+              })
+         that.$refs.myform.dialog = true
         }
-      })
-      }).catch(err => {
-          confirm('数据请求失败')      
-      })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });        
-        });
       },
       getData() {
         this.loading = true 
         let user_name = localStorage.getItem('username') 
-
         this.axios.get('/api/zsyf/findPersonTask.do?user_name='+user_name).then(res => {
           this.loading = false
           var that = this
@@ -133,7 +121,7 @@ export default {
           for (let i = 0; i < res.data.model.task.length; i++) {
            let resTime = ""
             resTime = res.data.model.task[i].CreateTime
-            res.data.model.task[i].CreateTime = that.moment(resTime).format("YYYY-MM-DD");
+            res.data.model.task[i].CreateTime = that.moment(resTime).format("LL");
             that.tableData.push(res.data.model.task[i])
           }  
       }).catch(err => {
@@ -150,9 +138,6 @@ export default {
           })
         this.tableData = newArr
       },
-
-
-     
     },
     created(){
        this.getData() 

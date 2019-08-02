@@ -79,6 +79,7 @@ export default {
         }).then(() => {
           if (this.id === 0) {
              this.axios.post('/api/zsyf/addinspectionRecords.do',defectRecord).then(res => {
+                this.dialog = false
                 // this.$parent.getData()
                 this.$emit('handleUp',this.currPage)
                 this.$message({
@@ -94,6 +95,7 @@ export default {
               return false
               }else{
               this.axios.post('/api/zsyf/updInspectionRecordsByKey.do',defectRecord).then(res => {
+                 this.dialog = false
                 this.$emit('handleUp',this.currPage)
                 this.$message({
                   type: 'success',

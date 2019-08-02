@@ -1,26 +1,23 @@
 <template>
          <el-dialog :visible.sync="dialog" append-to-body width="780px" :title="isAdd ? '新增水闸调度调令' : '编辑水闸调度调令'">
             <el-form :inline="true" :model="bformLabelAlign" ref="formLabelAlign" size="small" label-width="140px">
-            <el-form-item label="调度编号：" prop="do_id">
-                <el-input v-model="bformLabelAlign.do_id"></el-input>
+            <el-form-item label="本班运行时间：" prop="cs_runningtime">
+                <el-input v-model="bformLabelAlign.cs_runningtime"></el-input>
             </el-form-item>
-            <el-form-item label="调度依据：" prop="do_reason">
-                <el-input v-model="bformLabelAlign.do_reason"></el-input>
+            <el-form-item label="当班人员：" prop="cs_dutypersonnel">
+                <el-input v-model="bformLabelAlign.cs_dutypersonnel"></el-input>
             </el-form-item>
-            <el-form-item label="调度指令：" prop="do_instructions">
-                <el-input v-model="bformLabelAlign.do_instructions"></el-input>
+            <el-form-item label="交班时间：" prop="cs_duration"> 
+                <el-input v-model="bformLabelAlign.cs_duration" style="width: 200px;"></el-input>
             </el-form-item>
-            <el-form-item label="调度指令下达人：" prop="do_giveacommand">
-                <el-input v-model="bformLabelAlign.do_giveacommand"></el-input>
+            <el-form-item label="接班人员：" prop="cs_Successor">
+                <el-input v-model="bformLabelAlign.cs_Successor"></el-input>
             </el-form-item>
-            <el-form-item label="调度指令接收人：" prop="do_receivecommands">
-                <el-input v-model="bformLabelAlign.do_receivecommands"></el-input>
+            <el-form-item label="接班时间：" prop="cs_successiontime"> 
+                <el-input  v-model="bformLabelAlign.cs_successiontime"  style="width: 200px;"></el-input>
             </el-form-item>
-            <el-form-item label="调度时间：" prop="do_time"> 
-                <el-input v-model="bformLabelAlign.do_time" style="width: 200px;"></el-input>
-            </el-form-item>
-            <el-form-item label="状态：" prop="do_state" style="display:none">
-                <el-input v-model="bformLabelAlign.do_state" style="width: 536px;" value="0"></el-input>
+            <el-form-item label="状态：" prop="cs_state" style="display:none">
+                <el-input v-model="bformLabelAlign.cs_state" style="width: 536px;" value="0"></el-input>
             </el-form-item>
             <el-form-item style="text-align: right;width: 100%;">
                <el-button type="primary" @click="addData()">保存信息</el-button>
@@ -57,6 +54,8 @@ export default {
     data() {
       return {
         dialog: false,
+        value1: '',
+        value3: ''
         
       };
     },
@@ -71,9 +70,8 @@ export default {
           type: 'warning'
         }).then(() => {
           if (this.id === 0) {
-             this.axios.post('/api/zsyf/starDoTaskDispatchingOrder.do',defectRecord).then(res => {
-                // this.$parent.getData()
-                this.dialog = false
+             this.axios.post('/api/zsyf/starDoTaskChangeShifts.do',defectRecord).then(res => {
+               this.dialog = false
                 this.$emit('handleUp',this.currPage)
                 this.$message({
                   type: 'success',
@@ -87,8 +85,9 @@ export default {
               })
               return false
               }else{
-              this.axios.post('/api/zsyf/updDispatchingOrderByKey.do',defectRecord).then(res => {
+              this.axios.post('/api/zsyf/updChangeShiftsyKey.do',defectRecord).then(res => {
                 this.$emit('handleUp',this.currPage)
+
                 this.$message({
                   type: 'success',
                   message: '保存成功!'
@@ -107,10 +106,10 @@ export default {
                 });          
               });
             },
-       addData() {
+     addData() {
         let parme = this.bformLabelAlign
         parme.user_name = this.$store.state.username
-        parme.do_state = 1
+        parme.cs_state = 1
         var defectRecord = this.qs.stringify(parme, {
           serializeDate: (date) => {
           return this.moment(date).format("LLL");

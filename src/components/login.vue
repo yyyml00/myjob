@@ -66,10 +66,9 @@ export default {
              var defectRecord = this.qs.stringify(this.loginUser)
             
              this.axios.post('/api/zsyf/login.do',defectRecord).then(res => {
-                 console.log(res)
              if (res.data.model.userbean === undefined) {
-                 console.log(res)
                  this.mess = res.data.model.error
+                 console.log(333)
                  this.$message({
                   type: 'warning',
                   message: this.mess
@@ -77,9 +76,9 @@ export default {
              return false
              }else{
                  localStorage.setItem('username', res.data.model.userbean.user_name)
+                 this.$store.commit('login')
                  this.$router.push('/index')
-             }
-             
+             } 
              })
         },
         isEmpty(value){

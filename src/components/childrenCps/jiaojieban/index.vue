@@ -1,14 +1,13 @@
 <template>
-   <div class="e-file">
-       <editdiaodu :id="id" ref="form" :isAdd="isAdd" :bformLabelAlign="bformLabelAlign" :currPage="currPage" @handleUp="handleUp"/> 
+   <div class="jiaojieban">
+       <editjiaojieban :id="id" ref="form" :isAdd="isAdd" :bformLabelAlign="bformLabelAlign" :currPage="currPage" @handleUp="handleUp"/> 
        <el-row>
            <el-col :span="4"><div class="grid-content " style="text-align: left;">
-           <el-button type="primary" size="mini" >水闸调度令</el-button>
+           <el-button type="primary" size="mini" >交接班管理</el-button>
            </div></el-col>
            <el-col :span="20"><div class="grid-content "> 
              <div class="handle-box">
                <el-button type="primary" size="mini" icon="el-icon-refresh" @click="getData(currPage)">刷新</el-button>
-              
                <el-button type="primary" size="mini" icon="el-icon-plus" @click="add()">新增</el-button>
           
                  <!-- <el-input
@@ -36,54 +35,44 @@
                     style="width: 100%"
                     >
                     <el-table-column
-                    label="调度编号"
-                    prop="do_id"
-                    width="120">
+                    label="本班运行时间"
+                    prop="cs_runningtime"
+                    width="150">
                     </el-table-column>
                     <el-table-column
-                    label="调度依据"
-                    prop="do_reason"
-                    width="120">
+                    label="当班人员"
+                    prop="cs_dutypersonnel"
+                    width="150">
                     </el-table-column>
                     <el-table-column
-                    label="调度指令"
-                    prop="do_instructions"
-                    width="120">
+                    label="交班时间"
+                    prop="cs_duration"
+                    width="150">
                     </el-table-column>
                      <el-table-column
-                    label="调度指令下达人"
-                    prop="do_giveacommand"
-                    width="120">
+                    label="接班人员"
+                    prop="cs_Successor"
+                    width="150">
                     </el-table-column>
                     <el-table-column
-                    label="调度指令接收人"
-                    prop="do_receivecommands"
-                    width="120">
+                    label="接班时间"
+                    prop="cs_successiontime"
+                    width="150">
                     </el-table-column>
-                    <el-table-column
-                    label="时间"
-                    prop="do_time"
-                    width="120">
-                    </el-table-column>
-                    <!-- <el-table-column
-                    label="状态"
-                    prop="do_state"
-                    width="120">
-                    </el-table-column> -->
                      <el-table-column
                     label="状态"
                     width="160">
                     <template slot-scope="scope">
                         <el-tag
-                        v-if="scope.row.do_state === 0 ? true : false"
+                        v-if="scope.row.cs_state === 0 ? true : false"
                         >初始录入</el-tag>
                         <el-tag
                         type="warning"
-                        v-if="scope.row.do_state === 1 ? true : false"
+                        v-if="scope.row.cs_state === 1 ? true : false"
                         >审核中</el-tag>
                         <el-tag
                         type="success"
-                        v-if="scope.row.do_state === 2 ? true : false"
+                        v-if="scope.row.cs_state === 2 ? true : false"
                         >审核结束</el-tag>
                     </template>
                     </el-table-column>
@@ -94,22 +83,22 @@
                         <el-button
                         size="mini"
                         type="primary"
-                        v-if="scope.row.do_state === 0? true : false"
+                        v-if="scope.row.cs_state === 0? true : false"
                         @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                         <el-button
                         size="mini"
-                        v-if="scope.row.do_state === 0||scope.row.do_state === 2? true : false"
+                        v-if="scope.row.cs_state === 0||scope.row.cs_state === 2? true : false"
                         type="danger"
                         @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                         <el-button
                         size="mini"
                         type="success"
-                        v-if="scope.row.do_state === 1? true : false"
+                        v-if="scope.row.cs_state === 1? true : false"
                         @click="handlezh(scope.$index, scope.row)">审核中</el-button>
                         <el-button
                         size="mini"
                         type="success"
-                        v-if="scope.row.do_state === 0? true : false"
+                        v-if="scope.row.cs_state === 0? true : false"
                         @click="handle(scope.$index, scope.row)">提交申请</el-button>
                     </template>
                     </el-table-column>
@@ -131,9 +120,9 @@
 </template>
 <script>
 import { setTimeout } from 'timers';
-import editdiaodu from './editdiaodu'
+import editjiaojieban from './editjiaojieban'
 export default {
-     components: { editdiaodu },
+     components: { editjiaojieban },
      data() {
       return {
         tableData: [],
@@ -156,13 +145,13 @@ export default {
           return this.moment(date).format("YYYY-MM-DD");
         }
         })
-        this.axios.post('/api/zsyf/starDoTaskDispatchingOrder.do', defectRecord).then(res => {
+        this.axios.post('/api/zsyf/starDoTaskChangeShifts.do', defectRecord).then(res => {
         this.$message({
               type: 'success',
               message: '提交成功!'
             });
              let currPage = this.currPage
-          this.axios.get('/api/zsyf/findDispatchingOrderByPage.do?currentPage='+currPage).then(res => {
+          this.axios.get('/api/zsyf/findChangeShiftsByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
           this.tableData = res.data.model.pagemsg.lists
           this.totalPage = res.data.model.pagemsg.totalCount
@@ -171,7 +160,8 @@ export default {
       }).catch(err => {
           confirm('数据请求失败')
       })  
-      }).catch(err => {  
+      }).catch(err => {
+       
       })
       },
        handlezh() {
@@ -198,7 +188,7 @@ export default {
       },
       handleCurrentChange(val) {
         this.currPage = val
-        this.axios.get('/api/zsyf/findDispatchingOrderByPage.do?currentPage='+this.currPage).then(res => {
+        this.axios.get('/api/zsyf/findChangeShiftsByPage.do?currentPage='+this.currPage).then(res => {
           if (res.status === 200) {
           this.tableData = res.data.model.pagemsg.lists
           }
@@ -214,13 +204,13 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-           this.axios.get('/api/zsyf/delDispatchingOrderByKey.do?id='+id).then(res => {
+           this.axios.get('/api/zsyf/delChangeShiftsByKey.do?id='+id).then(res => {
               this.$message({
               type: 'success',
               message: '删除成功!'
             });
           let currPage = this.currPage
-          this.axios.get('/api/zsyf/findDispatchingOrderByPage.do?currentPage='+currPage).then(res => {
+          this.axios.get('/api/zsyf/findChangeShiftsByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
           this.tableData = res.data.model.pagemsg.lists
           this.totalPage = res.data.model.pagemsg.totalCount
@@ -249,7 +239,8 @@ export default {
       getData(data) {
         this.loading = true
         let currPage = parseInt(data) 
-        this.axios.get('/api/zsyf/findDispatchingOrderByPage.do?currentPage='+currPage).then(res => {
+
+        this.axios.get('/api/zsyf/findChangeShiftsByPage.do?currentPage='+currPage).then(res => {
           if (res.status === 200) {
             setTimeout(() => {
             this.loading = false

@@ -23,7 +23,7 @@
                         v-model="search"
                         size="mini"
                         clearable
-                        placeholder="输入出厂编号搜索"/>
+                        placeholder="输入资产名称搜索"/>
                    <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" style="display:inline-block;" @click="searchData()">搜索</el-button>
              </div>
              </div></el-col>
@@ -237,7 +237,7 @@ export default {
         let newArr = []
         let val = this.search
         newArr = this.tableData.filter(item => {         
-            return item.ei_id.indexOf(this.search) >= 0
+            return item.fa_name.indexOf(this.search) >= 0
           })
         this.tableData = newArr
       },

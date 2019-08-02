@@ -82,6 +82,7 @@ export default {
 
         if (this.id === 0) {
            this.axios.post('/api/zsyf/addUser.do',defectRecord).then(res => {
+              this.dialog = false
              this.$emit('handleUp',this.currPage)
               this.$message({
                 type: 'success',
@@ -96,6 +97,7 @@ export default {
             
         }else{
           this.axios.post('/api/zsyf/updUserByKey.do',defectRecord).then(res => {
+             this.dialog = false
           this.$emit('handleUp',this.currPage)
           this.$message({
             type: 'success',

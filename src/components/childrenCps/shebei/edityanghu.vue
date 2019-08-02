@@ -6,32 +6,27 @@
             </el-form-item>
             <el-form-item label="水闸名称：" prop="em_name">
                 <el-input v-model="yformLabelAlign.em_name"></el-input>
-            </el-form-item>
-            <el-form-item label="养护修理实施情况：" prop="em_Implementation">
-                <el-input v-model="yformLabelAlign.em_Implementation"></el-input>
-            </el-form-item>
+            </el-form-item> 
             <el-form-item label="耗用人工物料经费：" prop="em_resources">
                 <el-input v-model="yformLabelAlign.em_resources"></el-input>
             </el-form-item>
             <el-form-item label="参与人员签字：" prop="em_staffsignature">
                 <el-input v-model="yformLabelAlign.em_staffsignature"></el-input>
+            </el-form-item>        
+            <el-form-item label="开始日期：" prop="em_runtime">         
+                <el-date-picker type="date" placeholder="选择日期" v-model="yformLabelAlign.em_runtime" style="width: 200px;"></el-date-picker>  
             </el-form-item>
-            
-            <el-form-item label="开始日期：" prop="em_runtime">
-              
-                <el-date-picker type="date" placeholder="选择日期" v-model="yformLabelAlign.em_runtime" style="width: 200px;"></el-date-picker>
-            
-            </el-form-item>
-            <el-form-item label="结束日期：" prop="em_endtime">
-              
-                <el-date-picker type="date" placeholder="选择日期" v-model="yformLabelAlign.em_endtime" style="width: 200px;"></el-date-picker>
-            
+            <el-form-item label="结束日期：" prop="em_endtime">     
+                <el-date-picker type="date" placeholder="选择日期" v-model="yformLabelAlign.em_endtime" style="width: 200px;"></el-date-picker> 
             </el-form-item>
             <el-form-item label="养护内容：" prop="em_neirong">
-                <el-input type="textarea" v-model="yformLabelAlign.em_neirong" style="width: 200px;"></el-input>
+                <el-input type="textarea" v-model="yformLabelAlign.em_neirong" style="width: 556px;"></el-input>
+            </el-form-item>
+            <el-form-item label="养护修理实施情况：" prop="em_Implementation">
+                <el-input type="textarea" v-model="yformLabelAlign.em_Implementation" style="width: 556px;"></el-input>
             </el-form-item>
             <el-form-item label="分管领导签字：" prop="em_leadersignature">
-                <el-input type="textarea" v-model="yformLabelAlign.em_leadersignature" style="width: 200px;"></el-input>
+                <el-input v-model="yformLabelAlign.em_leadersignature" style="width: 200px;"></el-input>
             </el-form-item>
             <el-form-item style="text-align: right;width: 100%;">
                <el-button type="primary" @click="addData()">保存信息</el-button>
@@ -82,6 +77,7 @@ export default {
         }).then(() => {
            if (this.id === 0) {
             this.axios.post('/api/zsyf/addEquipmentMaintenance.do',defectRecord).then(res => {
+               this.dialog = false
               this.$emit('handleUp',this.currPage)
               this.$message({
                 type: 'success',
@@ -95,6 +91,7 @@ export default {
             })
           }else{
          this.axios.post('/api/zsyf/updEquipmentMaintenanceByKey.do',defectRecord).then(res => {
+            this.dialog = false
           this.$message({
             type: 'success',
             message: '保存成功!'

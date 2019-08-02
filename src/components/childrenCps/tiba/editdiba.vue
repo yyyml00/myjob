@@ -1,38 +1,32 @@
 <template>
-         <el-dialog :visible.sync="dialog" append-to-body width="780px" :title="isAdd ? '新增水闸调度调令' : '编辑水闸调度调令'">
-            <el-form :inline="true" :model="bformLabelAlign" ref="formLabelAlign" size="small" label-width="140px">
-            <el-form-item label="调度编号：" prop="do_id">
-                <el-input v-model="bformLabelAlign.do_id"></el-input>
+    <el-dialog :visible.sync="dialog" append-to-body width="780px" :title="isAdd ? '新增堤坝日巡查记录' : '编辑堤坝日巡查记录'">
+        <el-form label-width="130px" :inline="true" size="small" :model="xformLabelAlign" ref="formLabelAlign">
+            <el-form-item label="记录时间：" prop="dp_date">              
+                <el-date-picker type="date" placeholder="选择日期" v-model="xformLabelAlign.dp_date" style="width: 200px;"></el-date-picker>           
             </el-form-item>
-            <el-form-item label="调度依据：" prop="do_reason">
-                <el-input v-model="bformLabelAlign.do_reason"></el-input>
+            <el-form-item label="堤坝名称：" prop="dp_name">
+                <el-input v-model="xformLabelAlign.dp_name"></el-input>
             </el-form-item>
-            <el-form-item label="调度指令：" prop="do_instructions">
-                <el-input v-model="bformLabelAlign.do_instructions"></el-input>
+            <el-form-item label="巡查情况：" prop="dp_situation">
+                <el-input type="textarea" v-model="xformLabelAlign.dp_situation" style="width: 540px;"></el-input>
             </el-form-item>
-            <el-form-item label="调度指令下达人：" prop="do_giveacommand">
-                <el-input v-model="bformLabelAlign.do_giveacommand"></el-input>
+            <el-form-item label="处理意见：" prop="dp_opinion">
+                <el-input type="textarea" v-model="xformLabelAlign.dp_opinion" style="width: 540px;"></el-input>
             </el-form-item>
-            <el-form-item label="调度指令接收人：" prop="do_receivecommands">
-                <el-input v-model="bformLabelAlign.do_receivecommands"></el-input>
-            </el-form-item>
-            <el-form-item label="调度时间：" prop="do_time"> 
-                <el-input v-model="bformLabelAlign.do_time" style="width: 200px;"></el-input>
-            </el-form-item>
-            <el-form-item label="状态：" prop="do_state" style="display:none">
-                <el-input v-model="bformLabelAlign.do_state" style="width: 536px;" value="0"></el-input>
+            <el-form-item label="巡查人（签字）：" prop="dp_sign">
+                <el-input v-model="xformLabelAlign.dp_sign"></el-input>
             </el-form-item>
             <el-form-item style="text-align: right;width: 100%;">
                <el-button type="primary" @click="addData()">保存信息</el-button>
                 <el-button @click="resetForm('formLabelAlign')" type="danger">清除信息</el-button>
             </el-form-item>
-            </el-form>
-         </el-dialog>
+        </el-form>
+    </el-dialog>  
 </template>
 <script>
 export default {
-    name: 'jiform',
-     props: {
+    name: 'xuncha',
+    props: {
         isAdd: {
           type: Boolean,
           default: false
@@ -41,13 +35,9 @@ export default {
           type: Number,
           default: 0
         },
-        bformLabelAlign: {
+        xformLabelAlign: {
           type: Object,
           default: {}
-        },
-        tableData: {
-          type: Array,
-          tableData: []
         },
         currPage: {
           type: Number,
@@ -56,8 +46,7 @@ export default {
       },
     data() {
       return {
-        dialog: false,
-        
+          dialog: false,
       };
     },
     methods: {
@@ -71,9 +60,8 @@ export default {
           type: 'warning'
         }).then(() => {
           if (this.id === 0) {
-             this.axios.post('/api/zsyf/starDoTaskDispatchingOrder.do',defectRecord).then(res => {
+             this.axios.post('/api/zsyf/addDikePatrol.do',defectRecord).then(res => {
                 // this.$parent.getData()
-                this.dialog = false
                 this.$emit('handleUp',this.currPage)
                 this.$message({
                   type: 'success',
@@ -87,7 +75,7 @@ export default {
               })
               return false
               }else{
-              this.axios.post('/api/zsyf/updDispatchingOrderByKey.do',defectRecord).then(res => {
+              this.axios.post('/api/zsyf/updDikePatrolByKey.do',defectRecord).then(res => {
                 this.$emit('handleUp',this.currPage)
                 this.$message({
                   type: 'success',
@@ -107,13 +95,10 @@ export default {
                 });          
               });
             },
-       addData() {
-        let parme = this.bformLabelAlign
-        parme.user_name = this.$store.state.username
-        parme.do_state = 1
-        var defectRecord = this.qs.stringify(parme, {
+      addData() {
+        var defectRecord = this.qs.stringify(this.xformLabelAlign, {
           serializeDate: (date) => {
-          return this.moment(date).format("LLL");
+          return this.moment(date).format("YYYY-MM-DD");
         }
         })
        this.open(defectRecord)
