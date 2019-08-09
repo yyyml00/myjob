@@ -1,5 +1,7 @@
 <template>
+
   <el-container id="fisrt-container">
+  <self ref="self"/>
   <el-header>
     <img src="../assets/img/logo1.jpg" class="logo">
     <h1>智慧水闸管理系统</h1>
@@ -10,7 +12,7 @@
        <el-dropdown>
        <i class="el-icon-arrow-down el-icon--right" style="color: white;"></i>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-user">个人中心</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-user" @click.native="goself()">个人中心</el-dropdown-item>
         <el-dropdown-item icon="el-icon-circle-close" @click.native="logout()">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -67,7 +69,7 @@
     </el-menu>
     </el-aside>
     <el-container>
-      <el-main>
+      <el-main :class="{elmainindex:depath=='/index'}">
        <div class="tianqi">
           <el-row style="margin-top:0px;">
             <el-col :span="14"><div class="grid-content"></div></el-col>
@@ -88,22 +90,26 @@
 </template>
 
 <script>
-
-
-
+import self from './self'
 export default {
-
+    components:{ self },
     data() {
       return {
         username: "",
         // isCollapse: true
-        depath: '/index'
+        depath: '/index',
       }
     },
-    methods: { 
+    methods: {
+      goself(){
+        this.$refs.self.dialog = true
+         this.$refs.self.getdata()
+      }, 
       logout() {
         localStorage.removeItem("username");
+        localStorage.removeItem("id");
         this.$store.commit('logout')
+        console.log(this.$store.state.id)
         this.$router.push('/login')
       },
       getWeather () {
@@ -141,8 +147,9 @@ export default {
   }
   .el-header > h1 {
     color: rgb(255, 255, 255);
-    padding-left: 56px;
-    width: 200px;
+    padding-left: 20px;
+    font-size: 28px;
+    width: 300px;
     float: left;
     line-height: 60px;
     /* display: inline-block; */
@@ -170,12 +177,18 @@ export default {
     padding: 0 30px;
   }
   
-  .el-main {
-    /* background-color: #E9EEF3; */
+  .el-main { 
     padding: 0px;
   }
+  .elmainindex{
+    /* background-color: rgb(199, 245, 243); */
+    background: -webkit-radial-gradient(rgb(153, 235, 231),rgb(226, 245, 243)); /* Safari 5.1 - 6.0 */
+    background: -o-radial-gradient(rgb(153, 235, 231),rgb(226, 245, 243)); /* Opera 11.6 - 12.0 */
+    background: -moz-radial-gradient(rgb(153, 235, 231),rgb(226, 245, 243)); /* Firefox 3.6 - 15 */
+    background: radial-gradient(rgb(153, 235, 231),rgb(226, 245, 243)); /* 标准的语法 */
+  }
   .el-main .view{
-    padding: 20px;
+    padding: 10px;
   }
   .el-icon-user-solid {
     color: rgb(252, 252, 253);
@@ -206,5 +219,6 @@ export default {
     left: 10px;
     width: 60px;
   }
+ 
  
 </style>

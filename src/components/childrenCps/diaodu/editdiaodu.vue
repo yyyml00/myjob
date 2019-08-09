@@ -1,37 +1,44 @@
 <template>
          <el-dialog :visible.sync="dialog" append-to-body width="780px" :title="isAdd ? '新增水闸调度调令' : '编辑水闸调度调令'">
-            <el-form :inline="true" :model="bformLabelAlign" ref="formLabelAlign" size="small" label-width="140px">
-            <el-form-item label="调度编号：" prop="do_id">
+            <!-- <el-form :inline="true" :model="bformLabelAlign" ref="formLabelAlign" size="small" label-width="140px">
+             <el-form-item label="调度编号：" prop="do_id">
                 <el-input v-model="bformLabelAlign.do_id"></el-input>
-            </el-form-item>
-            <el-form-item label="调度依据：" prop="do_reason">
-                <el-input v-model="bformLabelAlign.do_reason"></el-input>
-            </el-form-item>
-            <el-form-item label="调度指令：" prop="do_instructions">
-                <el-input v-model="bformLabelAlign.do_instructions"></el-input>
-            </el-form-item>
-            <el-form-item label="调度指令下达人：" prop="do_giveacommand">
-                <el-input v-model="bformLabelAlign.do_giveacommand"></el-input>
-            </el-form-item>
-            <el-form-item label="调度指令接收人：" prop="do_receivecommands">
-                <el-input v-model="bformLabelAlign.do_receivecommands"></el-input>
-            </el-form-item>
-            <el-form-item label="调度时间：" prop="do_time"> 
-                <el-input v-model="bformLabelAlign.do_time" style="width: 200px;"></el-input>
-            </el-form-item>
-            <el-form-item label="状态：" prop="do_state" style="display:none">
-                <el-input v-model="bformLabelAlign.do_state" style="width: 536px;" value="0"></el-input>
-            </el-form-item>
-            <el-form-item style="text-align: right;width: 100%;">
+            </el-form-item> -->
+            <form action="" :model="bformLabelAlign">
+            <div class="bh-box">
+                <span>编号：</span><input v-model="bformLabelAlign.do_id" style="width: 120px;height:20px;"/>号
+            </div>
+            <table border="1" width="730px" height="280px" style="text-align:center; border-collapse:collapse; border-color:black;">
+            <tr>
+                <td colspan="3">调度依据：</td>
+                <td colspan="5"><textarea v-model="bformLabelAlign.do_reason" style="height:100px;"/></td>
+            </tr>
+             <tr>
+                <td colspan="3" style="padding-top: 40px;">调度指令：</td>
+                <td colspan="5"><textarea v-model="bformLabelAlign.do_instructions" style="height:100px;"/></td>
+            </tr>
+             <tr>
+                <td colspan="3">调度指令下达人：</td>
+                <td colspan="5"><input v-model="bformLabelAlign.do_giveacommand" style="height:38px;"/></td>
+            </tr>
+             <tr>
+                <td colspan="3">调度指令接收人：</td>
+                <td colspan="5"> <input v-model="bformLabelAlign.do_receivecommands" style="height:38px;"/>
+                <input v-model="bformLabelAlign.do_state" style="width: 536px;display: none;" value="0"/>
+                </td>
+            </tr>
+            </table>
+            </form>
+            <div style="text-align: right;width: 100%; margin-top: 20px;">
                <el-button type="primary" @click="addData()">保存信息</el-button>
-                <el-button @click="resetForm('formLabelAlign')" type="danger">清除信息</el-button>
-            </el-form-item>
-            </el-form>
+            </div>
+            <!-- </el-form> -->
+         
          </el-dialog>
 </template>
 <script>
 export default {
-    name: 'jiform',
+    name: 'diaodu',
      props: {
         isAdd: {
           type: Boolean,
@@ -61,9 +68,6 @@ export default {
       };
     },
     methods: {
-      resetForm(formLabelAlign) {
-        this.$refs[formLabelAlign].resetFields();
-      },
      open(defectRecord) {
         this.$confirm('你是否要保存此编辑内容, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -110,6 +114,7 @@ export default {
        addData() {
         let parme = this.bformLabelAlign
         parme.user_name = this.$store.state.username
+        parme.do_time = new Date()
         parme.do_state = 1
         var defectRecord = this.qs.stringify(parme, {
           serializeDate: (date) => {
@@ -122,5 +127,14 @@ export default {
 }
 </script>
 <style scoped>
-   
+   input,textarea{
+     width: 100%;
+     padding: 0;
+     margin: 0;
+     border: none;
+   }
+   .bh-box{
+     margin-bottom: 20px;
+     text-align: right;
+   }
 </style>

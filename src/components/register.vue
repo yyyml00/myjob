@@ -3,15 +3,30 @@
         <section class="form_container">
             <div class="manage_tip">
                 <span class="title">智慧水闸后台管理系统</span>
-                <el-form :model="registerUser" :rules="rules" ref="registerForm" label-width="80px" class="registerForm">
-                    <el-form-item label="用户名" prop="name">
-                        <el-input v-model="registerUser.name" placeholder="请输入用户名"></el-input>
+                <el-form :model="uformLabelAlign" :rules="rules" ref="registerForm" label-width="80px" class="registerForm">
+                    <el-form-item label="用户名" prop="user_name">
+                        <el-input v-model="uformLabelAlign.user_name" placeholder="请输入用户名"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" prop="password">
-                        <el-input type='password' v-model="registerUser.password" placeholder="请输入密码"></el-input>
+                    <el-form-item label="密码" prop="user_pwd">
+                        <el-input type='password' v-model="uformLabelAlign.user_pwd" placeholder="请输入密码"></el-input>
                     </el-form-item>
-                    <el-form-item label="确认密码" prop="password2">
-                        <el-input type='password' v-model="registerUser.password2" placeholder="请再次输入密码"></el-input>
+                    <el-form-item label="确认密码" prop="user_pwd2">
+                        <el-input type='password' v-model="uformLabelAlign.user_pwd2" placeholder="请再次输入密码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="号码：" prop="user_phone">
+                        <el-input v-model="uformLabelAlign.user_phone"></el-input>
+                    </el-form-item>
+                     <el-form-item label="邮箱：" prop="user_email">
+                        <el-input v-model="uformLabelAlign.user_email"></el-input>
+                    </el-form-item>
+                     <el-form-item label="性别：" prop="user_sex">
+                        <el-radio-group v-model="uformLabelAlign.user_sex">
+                        <el-radio label="男"></el-radio>
+                        <el-radio label="女"></el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="年龄：" prop="user_age">
+                        <el-input v-model="uformLabelAlign.user_age"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type='primary' class="submit_btn" @click="submitForm('registerForm')">立即注册</el-button>
@@ -28,28 +43,24 @@ export default {
     name:'register',
     data(){
         var validatePass2 = (rule, value, callback) => {
-            if (value !== this.registerUser.password) {
+            if (value !== this.uformLabelAlign.user_pwd) {
             callback(new Error('两次输入密码不一致!'));
             } else {
             callback();
             }
         };
         return{
-            registerUser:{
-                name:'',
-                password:'',
-                password2:'',
-            },
+            uformLabelAlign:{},
             rules:{
-                name:[
+                user_name:[
                     {required:true,message:'用户名不能为空',trigger:'blur'},
                     {min:2,max:30,message:'长度在2-30个字符之间',trigger:'blur'}
                 ],
-                password:[
+                user_pwd:[
                     {required:true,message:'密码不能为空',trigger:'blur'},
                     {min:3,max:30,message:'长度在6-30之间',trigger:'blur'}
                 ],
-                password2:[
+                 user_pwd2:[
                     {required:true,message:'密码不能为空',trigger:'blur'},
                     {min:3,max:30,message:'长度在6-30之间',trigger:'blur'},
                     {validator:validatePass2,trigger:'blur'}
@@ -68,6 +79,23 @@ export default {
                 //                 type:'success'
                 //             })
                 //         })
+                 var defectRecord = this.qs.stringify(this.uformLabelAlign, {
+                    serializeDate: (date) => {
+                    return this.moment(date).format("YYYY-MM-DD");
+                    }
+                    })
+                this.axios.post('/api/zsyf/addUser.do',defectRecord).then(res => {
+                this.$router.push('/login')
+                this.$message({
+                    type: 'success',
+                    message: '保存成功!'
+                });
+                }).catch(err => {
+                this.$message({
+                    type: 'success',
+                    message: '保存失败!'
+                });
+                })
                 this.$router.push('/login')
                 }    
             })

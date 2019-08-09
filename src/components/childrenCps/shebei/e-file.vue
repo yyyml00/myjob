@@ -1,6 +1,9 @@
 <template>
    <div class="e-file">
        <editEfile :id="id" ref="form" :isAdd="isAdd" :bformLabelAlign="bformLabelAlign" :currPage="currPage" @handleUp="handleUp"/> 
+       <eweixiu ref="wxtable" :wxid="wxid"/>
+       <eyanghu ref="yhtable" :yhid="yhid"/>
+       <equexian ref="qxtable" :qxid="qxid"/>
        <el-row>
            <el-col :span="4"><div class="grid-content " style="text-align: left;">
            <el-button type="primary" size="mini" >设备电子档案</el-button>
@@ -35,56 +38,94 @@
                     :data='tableData'
                     style="width: 100%"
                     >
+                     <el-table-column type="expand">
+                        <template slot-scope="props">
+                          <el-form label-position="left" class="demo-table-expand">
+                            <el-form-item label="生产日期：">
+                              <span>{{ props.row.ei_date }}</span>
+                            </el-form-item>
+                            <el-form-item label="规格型号：">
+                              <span>{{ props.row.ei_model }}</span>
+                            </el-form-item>
+                            <el-form-item label="防护等级：">
+                              <span>{{ props.row.ei_protectionlevel }}</span>
+                            </el-form-item>
+                            <el-form-item label="标准代号：">
+                              <span>{{ props.row.ei_code }}</span>
+                            </el-form-item>
+                            <el-form-item label="制造单位：">
+                              <span>{{ props.row.ei_company }}</span>
+                            </el-form-item>
+                            <el-form-item label="主要参数：">
+                              <span>{{ props.row.ei_parameter }}</span>
+                            </el-form-item>
+                            <el-form-item label="设备组：">
+                              <span>{{ props.row.ei_group}}</span>
+                            </el-form-item>
+                          </el-form>
+                        </template>
+                      </el-table-column>
                      <el-table-column
-                    label="出厂编号"
+                    label="设备编号"
                     prop="ei_id"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="生产日期"
-                    prop="ei_date"
-                    width="120">
+                    width="160">
                     </el-table-column>
                      <el-table-column
                     label="设备名称"
                     prop="ei_name"
-                    width="120">
+                    width="200">
+                    </el-table-column>
+                     <el-table-column
+                    label="设备维修记录"
+                    width="200">
+                    <!-- <template slot="header" slot-scope="">   
+                    </template> -->
+                    <template slot-scope="scope">
+                        <el-button
+                        size="mini"
+                        type="text"
+                        @click="handleWeixiu(scope.$index, scope.row)">点击查看</el-button>
+                    </template>
+                    </el-table-column>
+                     <el-table-column
+                    label="设备缺陷记录"
+                    width="200">
+                    <!-- <template slot="header" slot-scope="">   
+                    </template> -->
+                    <template slot-scope="scope">
+                        <el-button
+                        size="mini"
+                        type="text"
+                        @click="handleQuexian(scope.$index, scope.row)">点击查看</el-button>
+                    </template>
+                    </el-table-column>
+                     <el-table-column
+                    label="设备养护记录"
+                    width="200">
+                    <!-- <template slot="header" slot-scope="">   
+                    </template> -->
+                    <template slot-scope="scope">
+                        <el-button
+                        size="mini"
+                        type="text"
+                        @click="handleYanghu
+                        (scope.$index, scope.row)">点击查看</el-button>
+                    </template>
                     </el-table-column>
                     <el-table-column
-                    label="规格型号"
-                    prop="ei_model"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="防护等级"
-                    prop="ei_protectionlevel"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="标准代号"
-                    prop="ei_code"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="制造单位"
-                    prop="ei_company"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="主要参数"
-                    prop="ei_parameter"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    label="设备组"
-                    prop="ei_group"
-                    width="120">
+                    label="二维码"
+                    width="100">
+                    <template slot-scope="scope">
+                        <el-button
+                        size="mini"
+                        type="text"
+                        @click="handle(scope.$index, scope.row)">生成二维码</el-button>
+                    </template>
                     </el-table-column>
                     <el-table-column
                     label="操作"
                     width="160">
-                    <!-- <template slot="header" slot-scope="">
-                        
+                    <!-- <template slot="header" slot-scope="">   
                     </template> -->
                     <template slot-scope="scope">
                         <el-button
@@ -111,15 +152,18 @@
                 </el-pagination>
             </div></el-col>
         </el-row>
-       
-       
+        <VueQr :id='id' ref="vqr"></VueQr>
     </div> 
 </template>
 <script>
+import VueQr from '../erweima/shebeima'
 import { setTimeout } from 'timers';
 import editEfile from './editEfile'
+import eweixiu from './e-weixiu'
+import eyanghu from './e-yanghu'
+import equexian from './e-quexian'
 export default {
-     components: { editEfile },
+     components: { editEfile, eweixiu, eyanghu, equexian, VueQr},
      data() {
       return {
         tableData: [],
@@ -131,10 +175,32 @@ export default {
         id: 0,
         loading: false,
         bformLabelAlign: {},
-        isAdd: false
+        isAdd: false,
+        wxid: "",
+        yhid: '',
+        qxid: ''
       }
     },
     methods: {
+      handle(index, row){
+        let id = row.id
+        this.$refs.vqr.dialog = true
+      },
+      handleQuexian(index, row) {
+        this.qxid = row.ei_id
+        this.$refs.qxtable.getdata(this.qxid)
+        this.$refs.qxtable.dialog = true
+      },
+      handleWeixiu(index, row) {
+        this.wxid = row.ei_id
+        this.$refs.wxtable.getdata(this.wxid)
+        this.$refs.wxtable.dialog = true
+      },
+      handleYanghu(index, row) {
+        this.yhid = row.ei_id
+        this.$refs.yhtable.getdata(this.yhid)
+        this.$refs.yhtable.dialog = true
+      },
       handleDownload() {
         this.downloadLoading = true
         require.ensure([], () => {
@@ -223,6 +289,7 @@ export default {
             setTimeout(() => {
             this.loading = false
           }, 400);
+          console.log(res)
             this.tableData = res.data.model.pagemsg.lists
            this.totalPage = res.data.model.pagemsg.totalCount
            this.pageSize = res.data.model.pagemsg.pageSize 

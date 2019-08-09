@@ -43,12 +43,12 @@
                     <el-table-column
                     label="调度依据"
                     prop="do_reason"
-                    width="120">
+                    width="240">
                     </el-table-column>
                     <el-table-column
                     label="调度指令"
                     prop="do_instructions"
-                    width="120">
+                    width="240">
                     </el-table-column>
                      <el-table-column
                     label="调度指令下达人"
@@ -72,7 +72,7 @@
                     </el-table-column> -->
                      <el-table-column
                     label="状态"
-                    width="160">
+                    width="80">
                     <template slot-scope="scope">
                         <el-tag
                         v-if="scope.row.do_state === 0 ? true : false"
@@ -89,13 +89,8 @@
                     </el-table-column>
                     <el-table-column
                     label="操作"
-                    width="300">
+                    width="100">
                     <template slot-scope="scope">
-                        <el-button
-                        size="mini"
-                        type="primary"
-                        v-if="scope.row.do_state === 0? true : false"
-                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                         <el-button
                         size="mini"
                         v-if="scope.row.do_state === 0||scope.row.do_state === 2? true : false"
@@ -106,11 +101,6 @@
                         type="success"
                         v-if="scope.row.do_state === 1? true : false"
                         @click="handlezh(scope.$index, scope.row)">审核中</el-button>
-                        <el-button
-                        size="mini"
-                        type="success"
-                        v-if="scope.row.do_state === 0? true : false"
-                        @click="handle(scope.$index, scope.row)">提交申请</el-button>
                     </template>
                     </el-table-column>
                 </el-table>
@@ -125,7 +115,6 @@
                 </el-pagination>
             </div></el-col>
         </el-row>
-       
        
     </div> 
 </template>
@@ -149,31 +138,6 @@ export default {
       }
     },
     methods: {
-      handle(index, row) {
-        row.user_name = this.$store.state.username
-         var defectRecord = this.qs.stringify(row, {
-          serializeDate: (date) => {
-          return this.moment(date).format("YYYY-MM-DD");
-        }
-        })
-        this.axios.post('/api/zsyf/starDoTaskDispatchingOrder.do', defectRecord).then(res => {
-        this.$message({
-              type: 'success',
-              message: '提交成功!'
-            });
-             let currPage = this.currPage
-          this.axios.get('/api/zsyf/findDispatchingOrderByPage.do?currentPage='+currPage).then(res => {
-          if (res.status === 200) {
-          this.tableData = res.data.model.pagemsg.lists
-          this.totalPage = res.data.model.pagemsg.totalCount
-          this.pageSize = res.data.model.pagemsg.pageSize
-          } 
-      }).catch(err => {
-          confirm('数据请求失败')
-      })  
-      }).catch(err => {  
-      })
-      },
        handlezh() {
          this.$confirm('任务审核中无法操作', '提示', {
           confirmButtonText: '确定',

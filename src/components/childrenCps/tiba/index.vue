@@ -36,6 +36,16 @@
                     style="width: 100%"
                     >
                     <el-table-column
+                    label="二维码"
+                    width="100">
+                    <template slot-scope="scope">
+                        <el-button
+                        size="mini"
+                        type="text"
+                        @click="handle(scope.$index, scope.row)">生成二维码</el-button>
+                    </template>
+                    </el-table-column>
+                    <el-table-column
                     label="堤坝名称"
                     prop="dp_name"
                     width="200">
@@ -91,14 +101,16 @@
                 </el-pagination>
             </div></el-col>
         </el-row> 
+        <VueQr :id='id' ref="vqr"></VueQr>
     </div> 
 </template>
 <script>
+import VueQr from '../erweima/dibama'
 import { setTimeout } from 'timers';
 import editdiba from './editdiba'
 import { constants } from 'zlib';
 export default {
-    components: { editdiba },
+    components: { editdiba, VueQr },
      data() {
       return {
         tableData: [],
@@ -115,6 +127,10 @@ export default {
       }
     },
     methods: {
+      handle(index, row){
+        let id = row.id
+        this.$refs.vqr.dialog = true
+      },
       add() {
         this.$refs.form.dialog = true
         this.xformLabelAlign = {}

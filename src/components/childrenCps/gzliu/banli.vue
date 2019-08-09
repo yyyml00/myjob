@@ -11,7 +11,7 @@
                 <el-input v-model="bformLabelAlign.do_instructions" readonly="readonly"></el-input>
             </el-form-item>
             <el-form-item label="调度时间：" prop="do_time"> 
-                <el-date-picker type="date" readonly="readonly" placeholder="选择日期" v-model="bformLabelAlign.do_time" style="width: 200px;"></el-date-picker>
+                <el-input v-model="bformLabelAlign.do_time" readonly="readonly"></el-input>
             </el-form-item>
             <el-form-item label="调度指令下达人：" prop="do_giveacommand">
                 <el-input v-model="bformLabelAlign.do_giveacommand" readonly="readonly"></el-input>
@@ -104,7 +104,6 @@ export default {
           type: 'warning'
         }).then(() => {
           if (this.id === 0) {
-            console.log(defectRecord)
              this.axios.post('/api/zsyf/addDispatchingOrder.do',defectRecord).then(res => {
                 this.dialog = false
                 // this.$parent.getData()
@@ -151,7 +150,6 @@ export default {
         parme.suggest = this.pvminfo[0]
         parme.id = this.bformLabelAlign.id
         var defectRecord = this.qs.stringify(parme)
-        console.log(defectRecord)
         this.axios.post('/api/zsyf/commitTask.do',defectRecord).then(res => {
                 this.$message({
                   type: 'success',

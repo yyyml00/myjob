@@ -21,6 +21,14 @@ import Zichan from '@/components/childrenCps/shebei/zichan'
 import Quexian from '@/components/childrenCps/shebei/quexian'
 import Dayyanghu from '@/components/childrenCps/shebei/dayyanghu'
 import Diaodu from '@/components/childrenCps/diaodu/diaodu'
+import yzichan from '@/components/childrenCps/yidong/y-zichan'
+import yxuncha from '@/components/childrenCps/yidong/y-xuncha'
+import ydiba from '@/components/childrenCps/yidong/y-diba'
+import yshebei from '@/components/childrenCps/yidong/y-shebei'
+import yefile from '@/components/childrenCps/yidong/y-e-file'
+import yweixiu from '@/components/childrenCps/yidong/y-weixiu'
+import yyanghu from '@/components/childrenCps/yidong/y-yanghu'
+import yquexian from '@/components/childrenCps/yidong/y-quexian'
 
 Vue.use(Router)
 
@@ -37,6 +45,30 @@ Vue.use(Router)
     },{
       path: '/register',
       component: Register
+    },{
+      path: '/yzichan/:id',
+      component: yzichan
+    },{
+      path: '/yshebei/:id',
+      component: yshebei
+    },{
+      path: '/yefile/:id',
+      component: yefile
+    },{
+      path: '/yweixiu/:id',
+      component: yweixiu
+    },{
+      path: '/yyanghu/:id',
+      component: yyanghu
+    },{
+      path: '/yquexian/:id',
+      component: yquexian
+    },{
+      path: '/yxuncha/:id',
+      component: yxuncha
+    },{
+      path: '/ydiba/:id',
+      component: ydiba
     },{
       path: '/index',
       component: Index,

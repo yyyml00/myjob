@@ -4,12 +4,9 @@
             <el-form-item label="水闸名称" prop="r_name">
                 <el-input v-model="wformLabelAlign.r_name"></el-input>
             </el-form-item>
-            <!-- <el-form-item label="防护等级：" prop="R_runtime">
-                <el-input v-model="formLabelAlign.R_runtime"></el-input>
-            </el-form-item> -->
-            <el-form-item label="修理内容：" prop="r_neirong">
-                <el-input v-model="wformLabelAlign.r_neirong"></el-input>
-            </el-form-item>           
+            <el-form-item label="设备编号：" prop="ei_id">
+                <el-input v-model="wformLabelAlign.ei_id"></el-input>
+            </el-form-item>       
             <el-form-item label="结束时间：" prop="r_endtime">           
                 <el-date-picker type="date" placeholder="选择日期" v-model="wformLabelAlign.r_endtime" style="width: 200px;"></el-date-picker>
             </el-form-item>
@@ -22,9 +19,9 @@
             <el-form-item label="分管领导签字：" prop="r_leadersignature">
                 <el-input v-model="wformLabelAlign.r_leadersignature"></el-input>
             </el-form-item>
-            <el-form-item label="设备编号：" prop="ei_id">
-                <el-input v-model="wformLabelAlign.ei_id"></el-input>
-            </el-form-item>
+            <el-form-item label="修理内容：" prop="r_neirong">
+                <el-input type="textarea" v-model="wformLabelAlign.r_neirong" style="width: 565px;"></el-input>
+            </el-form-item> 
              <el-form-item label="养护修理实施情况：" prop="r_Implementation">
                 <el-input type="textarea" v-model="wformLabelAlign.r_Implementation" style="width: 565px;"></el-input>
             </el-form-item>

@@ -33,13 +33,9 @@ menu, nav, output, ruby, section, summary,
 time, mark, audio, video, input, button {
     margin: 0;
     padding: 0;
-    border: 0;
     /*font-size: 100%;*/
     font-weight: normal;
     vertical-align: baseline;
-}table {
-    border-collapse: collapse;
-    border-spacing: 0;
 }
 
 /* custom */
@@ -99,6 +95,13 @@ html, body {
     }
   .el-aside .el-submenu__title{
     width: 180px;
+  }
+  #mytabs .is-top{
+    color: white;
+  }
+  #mytabs .is-top .is-active {
+    color: rgb(231, 206, 65);
+    
   }
   
 </style>

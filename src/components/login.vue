@@ -75,7 +75,10 @@ export default {
              });
              return false
              }else{
+                 console.log(res)
                  localStorage.setItem('username', res.data.model.userbean.user_name)
+                 localStorage.setItem('id', res.data.model.userbean.id)
+                 console.log(this.$store.state.id)
                  this.$store.commit('login')
                  this.$router.push('/index')
              } 
@@ -107,9 +110,9 @@ export default {
   width: 370px;
   height: 210px;
   position: absolute;
-  top: 20%;
+  top: 50%;
   left: 34%;
-  margin-top: 100px;
+  margin-top: 200px;
   padding: 25px;
   border-radius: 5px;
  

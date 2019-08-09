@@ -35,6 +35,16 @@
                     :data='tableData'
                     style="width: 100%"
                     >
+                     <el-table-column
+                    label="二维码"
+                    width="100">
+                    <template slot-scope="scope">
+                        <el-button
+                        size="mini"
+                        type="text"
+                        @click="handle(scope.$index, scope.row)">生成二维码</el-button>
+                    </template>
+                    </el-table-column>
                     <el-table-column
                     label="资产编号"
                     prop="fa_id"
@@ -126,15 +136,16 @@
                 </el-pagination>
             </div></el-col>
         </el-row>
-       
+      <VueQr :id='id' ref="vqr"></VueQr> 
        
     </div> 
 </template>
 <script>
+import VueQr from '../erweima/zichanma'
 import { setTimeout } from 'timers';
 import editzichan from './editzichan'
 export default {
-     components: { editzichan },
+     components: { editzichan, VueQr },
      data() {
       return {
         tableData: [],
@@ -150,6 +161,10 @@ export default {
       }
     },
     methods: {
+      handle(index, row){
+        let id = row.id
+        this.$refs.vqr.dialog = true
+      },
       handleUp(data) {
           this.currPage = data;
           this.getData(this.currPage)
@@ -223,6 +238,7 @@ export default {
             setTimeout(() => {
             this.loading = false
           }, 400);
+          console.log(res)
             this.tableData = res.data.model.pagemsg.lists
            this.totalPage = res.data.model.pagemsg.totalCount
            this.pageSize = res.data.model.pagemsg.pageSize 

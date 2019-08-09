@@ -1,7 +1,7 @@
 <template>
         <el-dialog :visible.sync="dialog" append-to-body width="350px" :title="isAdd ? '新增人员信息' : '编辑人员信息'">
             <el-form label-width="100px" :rules="rules" :model="uformLabelAlign" ref="uformLabelAlign" :inline="true" size="small">
-            <el-form-item label="用户编号：" prop="user_id">
+            <el-form-item label="编号：" prop="user_id">
                 <el-input v-model="uformLabelAlign.user_id"></el-input>
             </el-form-item>
             <el-form-item label="姓名：" prop="user_name">
@@ -22,12 +22,12 @@
             <el-form-item label="地址：" prop="user_addr">
                 <el-input v-model="uformLabelAlign.user_addr"></el-input>
             </el-form-item>
-            <el-form-item label="所属部门：" prop="user_department">
-                <el-input v-model="uformLabelAlign.user_department"></el-input>
-            </el-form-item>
              <el-form-item label="职位：" prop="user_role">
                 <el-input v-model="uformLabelAlign.user_role"></el-input>
-            </el-form-item>  
+            </el-form-item> 
+            <el-form-item label="所属部门：" prop="user_department">
+                <el-input v-model="uformLabelAlign.user_department"></el-input>
+            </el-form-item> 
             <el-form-item style="text-align: right;width: 100%;">
                <el-button type="primary" @click="addData()">保存信息</el-button>
                 <el-button @click="resetForm('uformLabelAlign')" type="danger">清除信息</el-button>
@@ -61,7 +61,6 @@ export default {
         dialog: false,
         rules: {
           user_name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
-          user_id: [{ required: true, message: '用户编号不能为空', trigger: 'blur' }],
           user_sex: [{ required: true, message: '性别不能为空', trigger: 'blur' }],
           user_age: [{required: true, message: '年龄不能为空', trigger: 'blur' }],
           user_phone: [{required: true, message: '号码不能为空', trigger: 'blur' }],

@@ -90,6 +90,7 @@ export default {
         let taskName = row.Name
         if (taskName === '指令下达人' || taskName === '指令接收人' || taskName === '操作员') {
           var defectRecord = that.qs.stringify(parme)
+          console.log(defectRecord)
         that.axios.post('/api/zsyf/competeTask.do',defectRecord).then(res => {
                that.bformLabelAlign = res.data.model.dispatchingOrder
                that.commentlist = res.data.model.commentlist
@@ -121,7 +122,7 @@ export default {
           for (let i = 0; i < res.data.model.task.length; i++) {
            let resTime = ""
             resTime = res.data.model.task[i].CreateTime
-            res.data.model.task[i].CreateTime = that.moment(resTime).format("LL");
+            res.data.model.task[i].CreateTime = that.moment(resTime).format("LLL");
             that.tableData.push(res.data.model.task[i])
           }  
       }).catch(err => {

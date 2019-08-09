@@ -7,7 +7,7 @@
            </div></el-col>
            <el-col :span="20"><div class="grid-content "> 
              <div class="handle-box">
-                <form action="http://192.168.11.101:8080/zsyf/deploymentByZip.do" method="post" enctype="multipart/form-data">
+                <form action="http://192.168.11.108:8080/zsyf/deploymentByZip.do" method="post" enctype="multipart/form-data">
                     <div class="file">选择文件
                     <input type="file" name="file" id="file" >
                     </div>
